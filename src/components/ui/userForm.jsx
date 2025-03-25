@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { Eye, EyeOff } from "lucide-react";
+import useFetchAPI from "../../hooks/useFetchAPI";
 
 export function AddUserDialog({ isOpen, setIsOpen, addUser }) {
   const [formData, setFormData] = useState({
@@ -72,16 +73,38 @@ export function AddUserDialog({ isOpen, setIsOpen, addUser }) {
     });
     setIsOpen(false);
     setFormData({
-        firstName: "",
-        lastName: "",
-        username: "",
-        email: "",
-        phone: "",
-        role: "",
-        password: "",
-        confirmPassword: "",
-      })
+      firstName: "",
+      lastName: "",
+      username: "",
+      email: "",
+      phone: "",
+      role: "",
+      password: "",
+      confirmPassword: "",
+    })
   };
+
+  const [getLSPCompanyIfSelectedResponse, getLSPCompanyIfSelectedHandler] =
+    useFetchAPI(
+      {
+        url: "/role",
+        method: "GET",
+      },
+      (e) => {
+        return e;
+      },
+      (e) => {
+        return e;
+      }
+    );
+  useEffect(() => {
+    console.log("eeeeeeeee");
+
+    if (isOpen) {
+      getLSPCompanyIfSelectedHandler()
+    }
+  }, [isOpen])
+
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>

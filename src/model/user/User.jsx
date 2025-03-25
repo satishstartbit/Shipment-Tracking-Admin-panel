@@ -88,7 +88,7 @@ const initialUsers = [
   },
 ];
 
-export function Users() {
+const User = () => {
   const [users, setUsers] = useState(initialUsers);
   const [filter, setFilter] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
@@ -200,3 +200,4 @@ export function Users() {
     </div>
   );
 }
+export default User

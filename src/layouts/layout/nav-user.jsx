@@ -1,18 +1,12 @@
 import React from "react";
-import { Link } from 'react-router-dom'
 import {
-  BadgeCheck,
-  Bell,
   ChevronsUpDown,
-  CreditCard,
   LogOut,
-  Sparkles,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../../components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -24,9 +18,20 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "../../components/ui/sidebar";
+import { LogOutAction } from "../../store/slices/LoginSlice";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 export function NavUser({ user }) {
   const { isMobile } = useSidebar();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const Logout = () => {
+    // Dispatch the LogOutAction and navigate to the login page
+    dispatch(LogOutAction());  // This will reset the login state in the Redux store
+    navigate("/login");        // Redirect to the login page
+  };
 
   return (
     <SidebarMenu>
@@ -67,9 +72,7 @@ export function NavUser({ user }) {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuSeparator />
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={Logout}>  {/* Corrected to onClick */}
               <LogOut />
               Log out
             </DropdownMenuItem>
