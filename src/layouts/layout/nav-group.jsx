@@ -60,7 +60,7 @@ const SidebarMenuLink = ({ item, pathname }) => {
     <SidebarMenuItem>
       <SidebarMenuButton asChild isActive={checkIsActive(pathname, item)} tooltip={item.title}>
         <Link to={item.url} onClick={() => setOpenMobile(false)} className="text-[16px] menu-icon">
-          {item.icon && <item.icon  className="text-lg" size={28}/>} 
+          {item.icon && <item.icon className="text-lg" size={28} />}
           <span className="text-[16px]">{item.title}</span>
           {item.badge && <NavBadge>{item.badge}</NavBadge>}
         </Link>

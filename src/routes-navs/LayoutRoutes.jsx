@@ -5,7 +5,7 @@ import User from "../model/user/User";
 export const LayoutRoutes = [
   {
     path: "/dashboard",  // Fixed typo "dashboad" -> "dashboard"
-    element: <Dashboard />,
+    element: <Dashboard  />,
     roles: "*",
   },
   {

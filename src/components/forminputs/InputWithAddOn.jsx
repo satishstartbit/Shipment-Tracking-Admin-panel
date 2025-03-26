@@ -78,7 +78,7 @@ const InputWithAddOn = ({
             {label !== "" && (
                 <label
                     htmlFor={name ?? uuidName}
-                    className="ml-1 text-truncate w-100"
+                    className="ml-1 truncate w-full"
                     aria-labelledby={id ?? uuidName}
                     style={{
                         userSelect: "none",
@@ -88,7 +88,7 @@ const InputWithAddOn = ({
                     }}
                 >
                     {label}
-                    {isRequired && <span className="text-danger"> *</span>}
+                    {isRequired && <span className="text-red-500"> *</span>}
                 </label>
             )}
             <div style={{ position: "relative" }}>
@@ -118,7 +118,7 @@ const InputWithAddOn = ({
             </div>
             {feedbackType !== "none" && (
                 <div
-                    className={`${feedbackType}-feedback-class m-0 p-0 ml-1 w-100`}
+                    className={`${feedbackType}-feedback-class m-0 p-0 ml-1 w-full`}
                     style={{ userSelect: "none" }}
                 >
                     {feedbackMessage}

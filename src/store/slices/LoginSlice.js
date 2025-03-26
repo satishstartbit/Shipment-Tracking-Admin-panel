@@ -12,13 +12,23 @@ const LoginSlice = createSlice({
   initialState,
   reducers: {
     LoginAction: (state, action) => {
-      const { username } = action.payload;
+      const { email, accessToken, refreshToken } = action.payload;
       state.IsLoggedIn = true;
-      LocalStorageHelper.setItem("username", username);
+      LocalStorageHelper.setItem("email", email);
+      LocalStorageHelper.setItem("accessToken", accessToken);
+      LocalStorageHelper.setItem("refreshToken", refreshToken);
+
+    },
+    RefreshLoginAction: (state, action) => {
+      const { accessToken } = action.payload;
+      state.IsLoggedIn = true;
+      LocalStorageHelper.setItem("accessToken", accessToken);
     },
     LogOutAction: (state) => {
       state.IsLoggedIn = false;
-      LocalStorageHelper.removeItem("username");
+      LocalStorageHelper.setItem("email");
+      LocalStorageHelper.setItem("accessToken");
+      LocalStorageHelper.setItem("refreshToken");
 
     },
   },
@@ -26,7 +36,8 @@ const LoginSlice = createSlice({
 
 export const {
   LoginAction,
-  LogOutAction
+  LogOutAction,
+  RefreshLoginAction
 } = LoginSlice.actions;
 
 export default LoginSlice.reducer;

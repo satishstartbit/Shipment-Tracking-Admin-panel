@@ -2,60 +2,57 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import LocalStorageHelper from "../services/LocalStorageHelper";
-import { progressBarStart, progressBarStop } from "../services/NavProgressHelper";
-
+import {
+  progressBarStart,
+  progressBarStop,
+} from "../services/NavProgressHelper";
 const useFetchAPI = (
   {
     fullURL = null,
     url = "",
     method = "GET",
     sendImmediately = false,
-    authRequired = false,
+    authRequired = true,
     params = null,
     body = null,
     headers = null,
     isAsync = false,
     isRefreshCall = false,
+    data: dataPassedWhenCalled = null,
     haltRequest = false,
   },
   dataTransform = null,
   errorTransform = null
 ) => {
-  const { APIKey } = useSelector((state) => state.LoginReducer);  // Accessing the API key from Redux store.
+  const { APIKey } = useSelector((state) => state.LoginReducer);
   const [fetching, setFetching] = useState(false);
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
-
-  // Automatically trigger API call if sendImmediately is true
   useEffect(() => {
     if (sendImmediately) {
       immediateCall();
     }
-  }, [sendImmediately]);
-
-  // Handle immediate API call when needed
+  }, []);
   const immediateCall = async () => {
     await execute();
   };
 
-  // Error handling for async operation
   const catchErrorHandlerAsync = async (error) => {
-    handleError(error, true);
-  };
-
-  // Error handling for synchronous operation
-  const catchErrorHandler = (error) => {
-    handleError(error, false);
-  };
-
-  const handleError = (error, isAsync) => {
     console.log(error?.response);
     if (!error?.response && error?.request) {
       let responseMessage = genrateErrorMessage(error);
       error.response = { data: { message: responseMessage } };
     }
-    if ((error?.response?.status !== 401 || isRefreshCall)) {
-      setError(errorTransform ? errorTransform(error) : error);
+    if (
+      (error?.response?.status !== 401 && error?.response?.status !== "401") ||
+      isRefreshCall
+    ) {
+      if (errorTransform) {
+        let resultData = await errorTransform(error);
+        setError(resultData);
+      } else {
+        setError(error);
+      }
     } else {
       LocalStorageHelper.removeItem("token");
       window.location.reload(false);
@@ -63,18 +60,40 @@ const useFetchAPI = (
     setFetching(false);
     setData(null);
   };
-
-  // Handle success for async operations
+  const catchErrorHandler = (error) => {
+    console.log(error?.response);
+    if (!error?.response && error?.request) {
+      let responseMessage = genrateErrorMessage(error);
+      error.response = { data: { message: responseMessage } };
+    }
+    if (
+      (error?.response?.status !== 401 && error?.response?.status !== "401") ||
+      isRefreshCall
+    ) {
+      if (errorTransform) {
+        let resultData = errorTransform(error);
+        setError(resultData);
+      } else {
+        setError(error);
+      }
+    } else {
+      LocalStorageHelper.removeItem("token");
+      window.location.reload(false);
+    }
+    setFetching(false);
+    setData(null);
+  };
   const thenSuccessHandlerAsync = async (response) => {
-    handleSuccess(response, true);
+    if (dataTransform) {
+      let resultData = await dataTransform(response?.data);
+      setData(resultData);
+    } else {
+      setData(response?.data);
+    }
+    setFetching(false);
+    setError(null);
   };
-
-  // Handle success for normal operations
   const thenSuccessHandler = (response) => {
-    handleSuccess(response, false);
-  };
-
-  const handleSuccess = (response, isAsync) => {
     if (dataTransform) {
       let resultData = dataTransform(response?.data);
       setData(resultData);
@@ -85,64 +104,87 @@ const useFetchAPI = (
     setError(null);
   };
 
-  // Execute the API call
-  const execute = async () => {
+  const execute = async (newProps) => {
     setFetching(true);
     progressBarStart();
 
-    let fullurl = fullURL ?? "http://localhost:3000/api" + url;
-    let tokenHeader = {};
+        let fullurl = fullURL ?? "http://localhost:3000/api" + url;
+        let tokenHeader = {};
     if (authRequired) {
       tokenHeader.Authorization = `Bearer ${APIKey}`;
     }
-
     let newheaders = headers ? { ...headers, ...tokenHeader } : {
       "Content-Type": "application/json; charset=utf-8",
-      ...tokenHeader,
+      ...tokenHeader
     };
 
-    let newparams = params ?? {};
-    let newbody = body ?? null;
+    let newparams = {};
+    if (newProps?.params !== undefined && newProps?.params !== null) {
+      newparams = { ...newProps?.params };
+    } else if (params) {
+      newparams = { ...params };
+    }
+    let newbody = null;
+    if (newProps?.body !== undefined && newProps?.body !== null) {
+      newbody = newProps?.body;
+    } else {
+      newbody = body;
+    }
 
     if (haltRequest) {
-      setFetching(false);
-      setData(null);
+      if (isAsync) {
+        await thenSuccessHandlerAsync(null);
+      } else {
+        thenSuccessHandler(null);
+      }
+      progressBarStop();
       return;
     }
 
-    try {
-      switch (method) {
-        case "GET":
-          await axios.get(fullurl, { params: newparams, headers: newheaders })
-            .then(isAsync ? thenSuccessHandlerAsync : thenSuccessHandler)
-            .catch(isAsync ? catchErrorHandlerAsync : catchErrorHandler);
-          break;
+    switch (method) {
+      case "GET":
+        axios
+          .get(fullurl, { params: { ...newparams }, headers: newheaders })
+          .then(isAsync ? thenSuccessHandlerAsync : thenSuccessHandler)
+          .catch(isAsync ? catchErrorHandlerAsync : catchErrorHandler)
+          .finally(progressBarStop);
+        break;
+      case "POST":
+        axios
+          .post(fullurl, newbody, {
+            headers: {
+              ...newheaders,
 
-        case "POST":
-          await axios.post(fullurl, newbody, { headers: newheaders })
-            .then(isAsync ? thenSuccessHandlerAsync : thenSuccessHandler)
-            .catch(isAsync ? catchErrorHandlerAsync : catchErrorHandler);
-          break;
-
-        case "PUT":
-          await axios.put(fullurl, newbody, { headers: newheaders })
-            .then(isAsync ? thenSuccessHandlerAsync : thenSuccessHandler)
-            .catch(isAsync ? catchErrorHandlerAsync : catchErrorHandler);
-          break;
-
-        case "DELETE":
-          await axios.delete(fullurl, { headers: newheaders })
-            .then(isAsync ? thenSuccessHandlerAsync : thenSuccessHandler)
-            .catch(isAsync ? catchErrorHandlerAsync : catchErrorHandler);
-          break;
-
-        default:
-          throw new Error("Unsupported HTTP method");
-      }
-    } catch (error) {
-      catchErrorHandler(error);
-    } finally {
-      progressBarStop();
+            },
+          })
+          .then(isAsync ? thenSuccessHandlerAsync : thenSuccessHandler)
+          .catch(isAsync ? catchErrorHandlerAsync : catchErrorHandler)
+          .finally(progressBarStop);
+        break;
+      case "PUT":
+        axios
+          .put(fullurl, newbody, {
+            headers: {
+              ...newheaders,
+            },
+          })
+          .then(isAsync ? thenSuccessHandlerAsync : thenSuccessHandler)
+          .catch(isAsync ? catchErrorHandlerAsync : catchErrorHandler)
+          .finally(progressBarStop);
+        break;
+      case "DELETE":
+        axios
+          .delete(fullurl, {
+            headers: {
+              ...newheaders,
+            },
+          })
+          .then(isAsync ? thenSuccessHandlerAsync : thenSuccessHandler)
+          .catch(isAsync ? catchErrorHandlerAsync : catchErrorHandler)
+          .finally(progressBarStop);
+        break;
+      default:
+        break;
     }
   };
 
@@ -150,22 +192,58 @@ const useFetchAPI = (
 };
 
 const genrateErrorMessage = (error) => {
-  // Error message generation based on error codes
   let responseMessage = null;
-  switch (error.code) {
-    case "ECONNABORTED":
-      responseMessage = "Timeout Error: The request took too long.";
-      break;
-    case "ENOTFOUND":
-      responseMessage = "DNS Error: The domain could not be found.";
-      break;
-    case "ECONNREFUSED":
-      responseMessage = "Connection Refused: The server is down or unreachable.";
-      break;
-    default:
-      responseMessage = "Unknown Error: Please try again.";
+  if (error.code === "ECONNABORTED") {
+    responseMessage = "Timeout Error: The request took too long.";
+  } else if (error.code === "ENOTFOUND") {
+    responseMessage = "DNS Error: The domain could not be found.";
+  } else if (error.code === "ECONNREFUSED") {
+    responseMessage = "Connection Refused: The server is down or unreachable.";
+  } else if (error.code === "ECONNRESET") {
+    responseMessage =
+      "Connection Reset: Server unexpectedly closed the connection.";
+  } else if (error.code === "ETIMEDOUT") {
+    responseMessage = "Request Timed Out: The request failed due to timeout.";
+  } else if (error.code === "EAI_AGAIN") {
+    responseMessage = "Temporary DNS Error: Please try again later.";
+  } else if (error.code === "EHOSTUNREACH") {
+    responseMessage = "Host Unreachable: Network issues detected.";
+  } else if (error.code === "EADDRINUSE") {
+    responseMessage = "Address Already in Use: Check server settings.";
+  } else if (error.code === "EPIPE") {
+    responseMessage = "Broken Pipe: The connection was unexpectedly closed.";
+  } else if (error.code === "ENETUNREACH") {
+    responseMessage =
+      "Network Unreachable: Please check your internet connection.";
+  } else if (error.code === "EPROTO") {
+    responseMessage = "Protocol Error: SSL/TLS misconfiguration detected.";
+  } else if (error.code === "ECANCELED") {
+    responseMessage = "Request Canceled: The operation was manually aborted.";
+  } else if (error.code === "ERR_NETWORK") {
+    responseMessage =
+      "Network Error: Check your internet connection or firewall settings.";
+  } else if (error.code === "ERR_SSL_PROTOCOL_ERROR") {
+    responseMessage = "SSL Error: The SSL protocol handshake failed.";
+  } else if (error.code === "ERR_TLS_CERT_ALTNAME_INVALID") {
+    responseMessage =
+      "SSL Error: The certificate name does not match the domain.";
+  } else if (error.code === "ERR_TLS_CERT_EXPIRED") {
+    responseMessage = "SSL Error: The SSL certificate has expired.";
+  } else if (error.code === "ERR_CERT_AUTHORITY_INVALID") {
+    responseMessage = "SSL Error: The certificate authority is not trusted.";
+  } else if (error.code === "ERR_CORS") {
+    responseMessage =
+      "CORS Error: Request blocked by browser due to cross-origin policy.";
+  } else if (error.code === "ERR_INTERNET_DISCONNECTED") {
+    responseMessage =
+      "Internet Disconnected: Please check your internet connection.";
+  } else if (error.message.includes("Network Error")) {
+    responseMessage = "Network Error: Please check your internet connection.";
+  } else if (error.message.includes("CORS")) {
+    responseMessage =
+      "CORS Error: Request blocked by browser due to cross-origin policy.";
   }
+  console.log(responseMessage);
   return responseMessage;
 };
-
 export default useFetchAPI;

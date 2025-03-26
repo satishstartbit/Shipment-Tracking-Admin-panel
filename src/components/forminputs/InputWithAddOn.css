@@ -1,5 +1,6 @@
 .input {
   background-color: white;
+  padding-left: 6px !important;
 }
 
 .was-validated .form-control:invalid,

@@ -1,0 +1,17 @@
+.check-box-input-label {
+  font-size: 12px;
+  user-select: none;
+  cursor: pointer;
+  width: 100%;
+  display: inline;
+  margin-left: 4px;
+}
+.defaultpaymentmethod .check-box-input-label {
+
+  font-size: 13px ;
+  width: 300px;
+  font-weight: 500;
+  color: #31454C;
+  margin-left: 8px;
+  
+}
