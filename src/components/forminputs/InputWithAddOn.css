@@ -1,6 +1,7 @@
 .input {
   background-color: white;
-  padding-left: 6px !important;
+  padding-left: 10px !important;
+  background: #d7d1d16e !important;
 }
 
 .was-validated .form-control:invalid,
@@ -69,17 +70,21 @@
 .input-background-color-default {
   background-color: #f5f5f5;
 }
+
 .input-with-add-on-default {
   height: 40px;
+  padding-left: 6px !important;
+  border: 2px solid #e7e7e7 !important;
 }
 
-.date-time-input-is-not-valid > input {
+.date-time-input-is-not-valid>input {
   border-color: #a91928;
 }
 
-.has_left_add_on_date_time > input {
+.has_left_add_on_date_time>input {
   padding-left: 30px !important;
 }
+
 .input_addon_icon_left_date_time_calendar {
   position: absolute;
   top: 50%;
@@ -90,6 +95,7 @@
   height: 18px;
   width: 18px;
 }
+
 .input_addon_icon_left_date_time_calendar * {
   fill: grey !important;
 }

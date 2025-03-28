@@ -105,7 +105,7 @@ console.log("totalRows", totalRows, dataRows);
   };
 
   return (
-    <div className="w-100" style={{ overflow: "hidden" }}>
+    <div className="w-full" style={{ overflow: "hidden" }}>
       {isError && !isLoading && (
         <>
           {ErrorComponent ? (
@@ -116,14 +116,14 @@ console.log("totalRows", totalRows, dataRows);
         </>
       )}
       {isLoading && (
-        <div className="w-100 text-center default-loading-component">
-          <p className="text-dark text-center w-100">Loading...</p>
+        <div className="w-full text-center default-loading-component">
+          <p className="text-dark text-center w-full">Loading...</p>
         </div>
       )}
 
       {!isError && !isLoading && (dataRows ?? []).length === 0 && (
-        <div className="w-100 text-center default-no-data-component">
-          <p className="text-dark text-center w-100">{NoDataMessage ?? "No records found"}</p>
+        <div className="w-full text-center default-no-data-component">
+          <p className="text-dark text-center w-full">{NoDataMessage ?? "No records found"}</p>
         </div>
       )}
       {!isError && !isLoading && (dataRows ?? []).length > 0 && (
@@ -132,7 +132,7 @@ console.log("totalRows", totalRows, dataRows);
             selectedRows?.selectedRows.length > 0 &&
             isSelectAbleColumns2 && (
               <div
-                className="w-100 justify-content-between d-flex p-2 px-3"
+                className="w-full justify-between d-flex p-2 px-3"
                 style={{ backgroundColor: "rgb(227, 242, 253)" }}
               >
                 <span>
@@ -228,7 +228,7 @@ console.log("totalRows", totalRows, dataRows);
             </Row>
           )}
           {totalRows > currentRows && (
-            <div className="w-100 datatable-pagination-div">
+            <div className="w-full datatable-pagination-div">
               <PaginationComponent
                 totalRows={totalRows}
                 changePage={pageNoChangeHandler}

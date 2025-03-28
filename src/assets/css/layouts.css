@@ -1,0 +1,8 @@
+.main-div {
+    transition: width, 500ms;
+    overflow: auto;
+    height: calc(100vh);
+    padding: 6px 0px;
+    width: 100% !important;
+  }
+

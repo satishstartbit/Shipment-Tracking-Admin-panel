@@ -14,7 +14,7 @@ export function UserFilters({ filter, setFilter, selectedRole, setSelectedRole }
 
 
 
-      {/* Role Filter */}
+{/*    
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline">{selectedRole || "Role"}</Button>
@@ -27,7 +27,7 @@ export function UserFilters({ filter, setFilter, selectedRole, setSelectedRole }
           ))}
           <DropdownMenuItem onClick={() => setSelectedRole("")}>Clear</DropdownMenuItem>
         </DropdownMenuContent>
-      </DropdownMenu>
+      </DropdownMenu> */}
     </div>
   );
 }

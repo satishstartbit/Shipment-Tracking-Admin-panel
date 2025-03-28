@@ -17,6 +17,7 @@ const LoginUser = () => {
         (state) => state.SideBarReducer
     );
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const [showPassword, setShowPassword] = useState(false)
 
@@ -47,7 +48,6 @@ const LoginUser = () => {
 
 
 
-    const navigate = useNavigate();
 
 
     const [LoginFetchResponse, LoginFetchHandler] = useFetchAPI(

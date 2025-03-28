@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import { FormGroup, Input } from "reactstrap";
 import "./InputWithAddOn.css";
 import uuid from "react-uuid";
@@ -116,29 +115,5 @@ const InputWithAddOnMultiple = ({
   );
 };
 
-InputWithAddOnMultiple.propTypes = {
-  className: PropTypes.string,
-  disabled: PropTypes.any,
-  dynamicFormGroup: PropTypes.any,
-  extraProps: PropTypes.object,
-  feedbackMessage: PropTypes.any,
-  feedbackType: PropTypes.any,
-  hasAddOn: PropTypes.shape({
-    left: PropTypes.string,
-    right: PropTypes.string,
-  }),
-  id: PropTypes.any,
-  isRequired: PropTypes.bool,
-  isTouched: PropTypes.any,
-  label: PropTypes.any,
-  name: PropTypes.any,
-  onBlurAction: PropTypes.func,
-  placeholder: PropTypes.string,
-  reset: PropTypes.any,
-  setIsTouched: PropTypes.func,
-  setValue: PropTypes.func,
-  type: PropTypes.string,
-  validateHandler: PropTypes.func,
-  value: PropTypes.any,
-};
+
 export default InputWithAddOnMultiple;

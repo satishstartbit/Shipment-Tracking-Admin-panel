@@ -1,16 +1,11 @@
-import Dashboard from "../model/dashboard/Dashboard";
-import Task from "../model/task/Task";
+import Companies from "../model/companies/Companies";
 import User from "../model/user/User";
-
+import { AddUserDialog } from "../components/ui/userForm"
+import { AddCompany } from "../model/companies/AddCompany"
 export const LayoutRoutes = [
   {
-    path: "/dashboard",  // Fixed typo "dashboad" -> "dashboard"
-    element: <Dashboard  />,
-    roles: "*",
-  },
-  {
-    path: "/tasks",
-    element: <Task />,
+    path: "/companies",
+    element: <Companies />,
     roles: "*",
   },
   {
@@ -18,6 +13,28 @@ export const LayoutRoutes = [
     element: <User />,
     roles: "*",
   },
+  
+  {
+    path: "/createuser",
+    element: <AddUserDialog />,
+    roles: "*",
+  },
+  {
+    path: "/edituser/:id",
+    element: <AddUserDialog />,
+    roles: "*",
+  },
+  {
+    path: "/createcompany",
+    element: <AddCompany />,
+    roles: "*",
+  },
+  {
+    path: "/editcompany/:id",
+    element: <AddCompany />,
+    roles: "*",
+  },
+
 ];
 
 

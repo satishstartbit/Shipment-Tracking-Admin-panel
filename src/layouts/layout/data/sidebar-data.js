@@ -32,13 +32,8 @@ export const sidebarData = {
       title: 'General',
       items: [
         {
-          title: 'Dashboard',
-          url: '/dashboard',
-          icon: IconLayoutDashboard,
-        },
-        {
-          title: 'Tasks',
-          url: '/tasks',
+          title: 'Companies',
+          url: '/companies',
           icon: IconChecklist,
         },
         {

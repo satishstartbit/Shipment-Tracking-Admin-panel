@@ -1,13 +1,74 @@
 import { useEffect, useState } from "react";
-import * as Dialog from "@radix-ui/react-dialog";
 import useFetchAPI from "../../hooks/useFetchAPI";
 import useInputComponent from "../../hooks/useInputComponent"
 import InputWithAddOnMultiple from "../forminputs/InputWithAddOnMultiple"
 import DateTimeInputMultiple from "../date-time/DateTimeInputMultiple";
 import CheckboxInput from "../forminputs/CheckboxInput";
-import { Label } from "reactstrap";
 import InputSelect from "../forminputs/Select/InputSelect"
-export function AddUserDialog({ isOpen, setIsOpen }) {
+import { Label } from "reactstrap";
+import { useLocation, useNavigate } from "react-router-dom";
+import NotificationAlert from "../../hooks/NotificationAlert";
+
+export function AddUserDialog() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+
+  const [UserId, setUserId] = useState(null)
+  useEffect(() => {
+    const match = location?.pathname.match(/:([a-f0-9]{24})/);
+    if (match) {
+      setUserId(match[1])
+    } else {
+      setUserId(null)
+    }
+
+  }, [location])
+
+
+
+  const [getCompanyDetailsFetchHandler, getCompanyFetchHandler] = useFetchAPI(
+    {
+      url: `/users/${UserId}`,
+      method: "GET",
+      authRequired: true,
+
+    },
+    (e) => {
+
+      return e;
+    },
+    (e) => {
+      return e?.response ?? true;
+    }
+  );
+
+
+
+  // useEffect(() => {
+  //     if (getCompanyDetailsFetchHandler?.data) {
+
+
+  //         let users = getCompanyDetailsFetchHandler?.data?.user[0];
+  //         FirstNameInput.setEnteredValue(users.first_name)
+  //         LastNameInput.setEnteredValue(users.last_name)
+  //         EmailInput.setEnteredValue(users.email)
+  //         PasswordInput.setEnteredValue(users.password)
+  //         PhoneNumberInput.setEnteredValue(users.mobile_no)
+  //         DobInput.setEnteredValue(users.dob)
+  //         UserNameInput.setEnteredValue(users.username)
+  //     }
+  // }, [getCompanyDetailsFetchHandler?.data])
+
+
+
+  useEffect(() => {
+    if (UserId !== null) {
+      getCompanyFetchHandler()
+    }
+  }, [UserId])
+
+
 
   const [getRoleResponse, getRoleHandler] =
     useFetchAPI(
@@ -29,50 +90,141 @@ export function AddUserDialog({ isOpen, setIsOpen }) {
 
 
   useEffect(() => {
-    if (isOpen) {
-      getRoleHandler()
+    getRoleHandler()
+  }, [])
+
+
+
+
+  let UserNameInput = useInputComponent();
+  let UserNameValidator = (value) => {
+    // Check if the field is empty
+    if (value === "" || !value) {
+      UserNameInput.setFeedbackMessage("Field Required!");
+      UserNameInput.setMessageType("error");
+      return false;
     }
-  }, [isOpen])
+
+    // Check for minimum length
+    if (value.length < 3) {
+      UserNameInput.setFeedbackMessage("Username must be at least 3 characters.");
+      UserNameInput.setMessageType("error");
+      return false;
+    }
+
+    // Check for leading or trailing spaces
+    if (value.trim() !== value) {
+      UserNameInput.setFeedbackMessage("Username cannot have leading or trailing spaces.");
+      UserNameInput.setMessageType("error");
+      return false;
+    }
+
+    // Check if the username starts with a letter
+    const startWithLetterRegex = /^[a-zA-Z]/;
+    if (!startWithLetterRegex.test(value)) {
+      UserNameInput.setFeedbackMessage("Username must start with a letter.");
+      UserNameInput.setMessageType("error");
+      return false;
+    }
+
+    // Check if the username contains only alphanumeric characters and underscores
+    const usernameRegex = /^[a-zA-Z0-9_]+$/;
+    if (!usernameRegex.test(value)) {
+      UserNameInput.setFeedbackMessage("Username can only contain letters, numbers, and underscores.");
+      UserNameInput.setMessageType("error");
+      return false;
+    }
+
+    // Clear feedback if everything is valid
+    UserNameInput.setFeedbackMessage("");
+    UserNameInput.setMessageType("none");
+    return true;
+  };
+
 
 
   // Firstname
   let FirstNameInput = useInputComponent();
   let FirstNameValidator = (value) => {
+    // Check if the field is empty
     if (value === "" || !value) {
       FirstNameInput.setFeedbackMessage("Field Required!");
       FirstNameInput.setMessageType("error");
       return false;
     }
+
+    // Check if the name starts with a number
+    if (/^\d/.test(value)) {
+      FirstNameInput.setFeedbackMessage("First name cannot start with a number.");
+      FirstNameInput.setMessageType("error");
+      return false;
+    }
+
+    // Check if the name contains only letters, spaces, or hyphens (you can adjust this regex as needed)
+    const nameRegex = /^[a-zA-Z\s-]+$/;
+    if (!nameRegex.test(value)) {
+      FirstNameInput.setFeedbackMessage("First name can only contain letters, spaces, or hyphens.");
+      FirstNameInput.setMessageType("error");
+      return false;
+    }
+
+    // Clear feedback if everything is valid
     FirstNameInput.setFeedbackMessage("");
     FirstNameInput.setMessageType("none");
     return true;
   };
 
-
-
-
   // Lastname
   let LastNameInput = useInputComponent();
   let LastNameValidator = (value) => {
+    // Check if the field is empty
     if (value === "" || !value) {
       LastNameInput.setFeedbackMessage("Field Required!");
       LastNameInput.setMessageType("error");
       return false;
     }
+
+    // Check if the name starts with a number
+    if (/^\d/.test(value)) {
+      LastNameInput.setFeedbackMessage("Last name cannot start with a number.");
+      LastNameInput.setMessageType("error");
+      return false;
+    }
+
+    // Check if the name contains only letters, spaces, or hyphens (you can adjust this regex as needed)
+    const nameRegex = /^[a-zA-Z\s-]+$/;
+    if (!nameRegex.test(value)) {
+      LastNameInput.setFeedbackMessage("Last name can only contain letters, spaces, or hyphens.");
+      LastNameInput.setMessageType("error");
+      return false;
+    }
+
+    // Clear feedback if everything is valid
     LastNameInput.setFeedbackMessage("");
     LastNameInput.setMessageType("none");
     return true;
   };
 
+
   // Email
   let EmailInput = useInputComponent();
   let EmailValidator = (value) => {
+    // Check if the email field is empty
+    if (value === "" || !value) {
+      EmailInput.setFeedbackMessage("Email is required!");
+      EmailInput.setMessageType("error");
+      return false;
+    }
+
+    // Validate email format using regex
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailRegex.test(value)) {
       EmailInput.setFeedbackMessage("Invalid Email Format!");
       EmailInput.setMessageType("error");
       return false;
     }
+
+    // Clear feedback if the email is valid
     EmailInput.setFeedbackMessage("");
     EmailInput.setMessageType("none");
     return true;
@@ -83,29 +235,83 @@ export function AddUserDialog({ isOpen, setIsOpen }) {
   // PhoneNumber
   let PhoneNumberInput = useInputComponent();
   let PhoneNumberValidator = (value) => {
-    const phoneRegex = /^[0-9]{10}$/;
-    if (!phoneRegex.test(value)) {
-      PhoneNumberInput.setFeedbackMessage("Invalid Phone Number!");
+    // Check if the phone number field is empty
+    if (value === "" || !value) {
+      PhoneNumberInput.setFeedbackMessage("Phone Number is required!");
       PhoneNumberInput.setMessageType("error");
       return false;
     }
+
+    // Validate the phone number format (exactly 10 digits)
+    const phoneRegex = /^[0-9]{10}$/;
+    if (!phoneRegex.test(value)) {
+      PhoneNumberInput.setFeedbackMessage("Invalid Phone Number! It must be exactly 10 digits.");
+      PhoneNumberInput.setMessageType("error");
+      return false;
+    }
+
+    // Clear feedback if the phone number is valid
     PhoneNumberInput.setFeedbackMessage("");
     PhoneNumberInput.setMessageType("none");
     return true;
   };
 
+
   // Password
   let PasswordInput = useInputComponent();
   let PasswordValidator = (value) => {
-    if (value.length < 6) {
-      PasswordInput.setFeedbackMessage("Password must be at least 6 characters!");
+    // Check for empty password
+    if (value === "" || !value) {
+      PasswordInput.setFeedbackMessage("Password is required!");
       PasswordInput.setMessageType("error");
       return false;
     }
+
+    // Check password length
+    if (value.length < 6) {
+      PasswordInput.setFeedbackMessage("Password must be at least 6 characters long!");
+      PasswordInput.setMessageType("error");
+      return false;
+    }
+
+    // Check for at least one uppercase letter
+    const uppercaseRegex = /[A-Z]/;
+    if (!uppercaseRegex.test(value)) {
+      PasswordInput.setFeedbackMessage("Password must contain at least one uppercase letter!");
+      PasswordInput.setMessageType("error");
+      return false;
+    }
+
+    // Check for at least one lowercase letter
+    const lowercaseRegex = /[a-z]/;
+    if (!lowercaseRegex.test(value)) {
+      PasswordInput.setFeedbackMessage("Password must contain at least one lowercase letter!");
+      PasswordInput.setMessageType("error");
+      return false;
+    }
+
+    // Check for at least one digit
+    const numberRegex = /[0-9]/;
+    if (!numberRegex.test(value)) {
+      PasswordInput.setFeedbackMessage("Password must contain at least one number!");
+      PasswordInput.setMessageType("error");
+      return false;
+    }
+
+    // Check for at least one special character
+    const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
+    if (!specialCharRegex.test(value)) {
+      PasswordInput.setFeedbackMessage("Password must contain at least one special character!");
+      PasswordInput.setMessageType("error");
+      return false;
+    }
+
+    // If all checks pass, clear feedback and set message type to none
     PasswordInput.setFeedbackMessage("");
     PasswordInput.setMessageType("none");
     return true;
   };
+
 
 
 
@@ -136,21 +342,21 @@ export function AddUserDialog({ isOpen, setIsOpen }) {
 
   }
 
-  const [selectlanguage, setSelectlanguage] = useState();
-  const [selectlanguageischeck, setSelectlanguageischeck] = useState(false);
-  const [languageFeedbackMessage, setLanguageFeedBackMessage] = useState({
+  const [selectRole, setSelectRole] = useState();
+  const [selectRoleischeck, setSelectRoleischeck] = useState(false);
+  const [RoleFeedbackMessage, setRoleFeedBackMessage] = useState({
     type: "info",
     message: "",
   });
-  const languageSelectValidater = (value) => {
+  const RoleSelectValidater = (value) => {
     if (value === "" || !value) {
-      setLanguageFeedBackMessage({
+      setRoleFeedBackMessage({
         type: "error",
         message: "This field is required!",
       });
       return false;
     }
-    setLanguageFeedBackMessage({ type: "info", message: "" });
+    setRoleFeedBackMessage({ type: "info", message: "" });
 
     return true;
   };
@@ -158,7 +364,26 @@ export function AddUserDialog({ isOpen, setIsOpen }) {
 
 
 
+  const reset = () => {
+    UserNameInput.reset()
+    FirstNameInput.reset()
+    LastNameInput.reset()
+    EmailInput.reset()
+    PhoneNumberInput.reset()
+    PasswordInput.reset()
+    DobInput.reset()
+    setSelectRole()
+    setSelectRoleischeck(false)
+    setRoleFeedBackMessage({
+      type: "info",
+      message: ""
+    })
+  }
 
+
+  useEffect(() => {
+    reset()
+  }, [])
 
   const [CreateUserResponse, CreateUserHandler] =
     useFetchAPI(
@@ -167,10 +392,23 @@ export function AddUserDialog({ isOpen, setIsOpen }) {
         method: "POST",
       },
       (e) => {
+        NotificationAlert(
+          "success",
+          "User has been created successfully."
+        );
+        navigate("/users")
+        reset()
         return e;
       },
       (e) => {
-        return e;
+        let message =
+          "Something went wrong while logging out. please try again.";
+        if (typeof e?.response?.data === "string") {
+          message = e?.response?.data;
+        } else if (typeof e?.response?.data?.message === "string") {
+          message = e?.response?.data?.message;
+        }
+        NotificationAlert("error", message);
       }
     );
 
@@ -178,7 +416,6 @@ export function AddUserDialog({ isOpen, setIsOpen }) {
   // Handle Submit
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsOpen(false);
 
 
     let isFirstNameValidator = FirstNameValidator(FirstNameInput.enteredValue)
@@ -187,204 +424,213 @@ export function AddUserDialog({ isOpen, setIsOpen }) {
     let isPhoneNumberValidator = PhoneNumberValidator(PhoneNumberInput.enteredValue)
     let isPasswordValidator = PasswordValidator(PasswordInput.enteredValue)
     let isDobValidator = DobValidator(DobInput.enteredValue)
-
+    let isUserNameValidator = UserNameValidator(UserNameInput.enteredValue)
 
     if (!isFirstNameValidator || !isLastNameValidator || !isEmailValidator ||
-      !isPhoneNumberValidator || !isPasswordValidator || !isDobValidator) {
-      alert("fill complete fields")
+      !isPhoneNumberValidator || !isPasswordValidator || !isDobValidator || !isUserNameValidator) {
+      NotificationAlert(
+        "error",
+        "Please enter all information before proceeding."
+      );
     } else {
-      console.log("dfg", {
-        first_name: FirstNameInput.enteredValue,
-        last_name: LastNameInput.enteredValue,
-        email: EmailInput.enteredValue,
-        password: PasswordInput.enteredValue,
-        mobile_no: "846756464646",
-        gender: Gender,
-        dob: DobInput.enteredValue,
-        roleid: selectlanguage,
-        avatar: "df"
-      },
-);
 
-    await CreateUserHandler({
-      body: {
-        first_name: FirstNameInput.enteredValue,
-        last_name: LastNameInput.enteredValue,
-        email: EmailInput.enteredValue,
-        password: PasswordInput.enteredValue,
-        mobile_no: "846756464646",
-        gender: Gender,
-        dob: DobInput.enteredValue,
-        roleid: selectlanguage,
-        avatar: "df"
-      },
-    });
-  }
 
-};
+      await CreateUserHandler({
+        body: {
+          first_name: FirstNameInput.enteredValue,
+          last_name: LastNameInput.enteredValue,
+          email: EmailInput.enteredValue,
+          password: PasswordInput.enteredValue,
+          mobile_no: PhoneNumberInput.enteredValue,
+          gender: Gender,
+          dob: DobInput.enteredValue,
+          roleid: selectRole,
+          avatar: "df",
+          username: UserNameInput.enteredValue
+        },
+      });
+    }
+
+  };
 
 
 
-return (
-  <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
-    <Dialog.Portal>
-      <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-50 w-[100%] z-30" />
-      <Dialog.Content className="z-40 fixed top-1/2 left-1/2 w-[90%] max-w-md -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-lg shadow-lg">
-        <Dialog.Title className="text-lg font-semibold">Add New User</Dialog.Title>
-        <Dialog.Description className="text-sm text-gray-500 mb-4">
-          Create a new user here. Click save when you’re done.
-        </Dialog.Description>
+  return (
+    <div className="w-full p-5" >
+      <p className="text-lg font-semibold">Add New User</p>
+      <p className="text-sm text-gray-500 mb-4">
+        Create a new user here. Click save when you’re done.
+      </p>
+      <form onSubmit={handleSubmit} >
 
-        <form onSubmit={handleSubmit} >
+        <div className="my-5 grid grid-cols-2 gap-4" >
+          <div className="mb-5" >
+            <InputWithAddOnMultiple
+              label="User Name"
+              placeholder=""
+              className="loginInputs  w-full"
+              value={UserNameInput.enteredValue ?? ''}
+              setValue={UserNameInput.setEnteredValue}
+              setIsTouched={UserNameInput.setIsTouched}
+              feedbackMessage={UserNameInput.feedbackMessage}
+              feedbackType={UserNameInput.messageType}
+              isTouched={UserNameInput.isTouched}
+              validateHandler={UserNameValidator}
+              reset={UserNameInput.reset}
+              extraProps={{ style: { height: "32px" } }}
+              onBlurAction={(e) => { return e }}
+              isRequired={true}
+              disabled={false}
+            />
+          </div>
+          <div className="mb-5" >
+            <InputWithAddOnMultiple
+              label="First Name"
+              placeholder=""
+              className="loginInputs  w-full"
+              value={FirstNameInput.enteredValue ?? ''}
+              setValue={FirstNameInput.setEnteredValue}
+              setIsTouched={FirstNameInput.setIsTouched}
+              feedbackMessage={FirstNameInput.feedbackMessage}
+              feedbackType={FirstNameInput.messageType}
+              isTouched={FirstNameInput.isTouched}
+              validateHandler={FirstNameValidator}
+              reset={FirstNameInput.reset}
+              extraProps={{ style: { height: "32px" } }}
+              onBlurAction={(e) => { return e }}
+              isRequired={true}
+              disabled={false}
+            />
+          </div>
 
-          <div className="my-5" >
-
-            <div className="mb-3" >
-              <InputWithAddOnMultiple
-                label="First Name"
-                placeholder=""
-                className="loginInputs  w-full"
-                value={FirstNameInput.enteredValue ?? ''}
-                setValue={FirstNameInput.setEnteredValue}
-                setIsTouched={FirstNameInput.setIsTouched}
-                feedbackMessage={FirstNameInput.feedbackMessage}
-                feedbackType={FirstNameInput.messageType}
-                isTouched={FirstNameInput.isTouched}
-                validateHandler={FirstNameValidator}
-                reset={FirstNameInput.reset}
-                extraProps={{ style: { height: "32px" } }}
-                onBlurAction={(e) => { return e }}
-                isRequired={true}
-                disabled={false}
-              />
-            </div>
-
-            <div className="mb-3" >
-              <InputWithAddOnMultiple
-                label="Last Name"
-                placeholder=""
-                className="loginInputs w-full"
-                value={LastNameInput.enteredValue ?? ''}
-                setValue={LastNameInput.setEnteredValue}
-                setIsTouched={LastNameInput.setIsTouched}
-                feedbackMessage={LastNameInput.feedbackMessage}
-                feedbackType={LastNameInput.messageType}
-                isTouched={LastNameInput.isTouched}
-                validateHandler={LastNameValidator}
-                reset={LastNameInput.reset}
-                extraProps={{ style: { height: "32px" } }}
-                onBlurAction={(e) => { return e }}
-                isRequired={true}
-                disabled={false}
-              />
-            </div>
-            <div className="mb-3" >
-              <InputWithAddOnMultiple
-                label="Email"
-                placeholder=""
-                className="loginInputs w-full"
-                value={EmailInput.enteredValue ?? ''}
-                setValue={EmailInput.setEnteredValue}
-                setIsTouched={EmailInput.setIsTouched}
-                feedbackMessage={EmailInput.feedbackMessage}
-                feedbackType={EmailInput.messageType}
-                isTouched={EmailInput.isTouched}
-                validateHandler={EmailValidator}
-                reset={EmailInput.reset}
-                extraProps={{ style: { height: "32px" } }}
-                onBlurAction={(e) => { return e }}
-                isRequired={true}
-                disabled={false}
-              />
-            </div>
-
-
-            <div className="mb-3" >
-              <DateTimeInputMultiple
-                label="Date"
-                className="datetime-input-format-type-1"
-                value={DobInput.enteredValue ?? ''}
-                setValue={DobInput.setEnteredValue}
-                setIsTouched={DobInput.setIsTouched}
-                feedbackMessage={DobInput.feedbackMessage}
-                feedbackType={DobInput.messageType}
-                isTouched={DobInput.isTouched}
-                validateHandler={DobValidator}
-                reset={DobInput.reset}
-                dateFormat={"YYYY-MM-DD"}
-                timeFormat={false}
-                extraProps={{ style: { width: "100%", height: "32px" } }}
-                heightClass="small"
-                isRequired={true}
-                inputProps={{
-                  placeholder: "YYYY-MM-DD",
-                }}
-                onBlurAction={(e) => {
-                  return e
-
-                }}
-                momentFormat={"YYYY-MM-DD"}
-              />
-
-            </div>
+          <div className="mb-5" >
+            <InputWithAddOnMultiple
+              label="Last Name"
+              placeholder=""
+              className="loginInputs w-full"
+              value={LastNameInput.enteredValue ?? ''}
+              setValue={LastNameInput.setEnteredValue}
+              setIsTouched={LastNameInput.setIsTouched}
+              feedbackMessage={LastNameInput.feedbackMessage}
+              feedbackType={LastNameInput.messageType}
+              isTouched={LastNameInput.isTouched}
+              validateHandler={LastNameValidator}
+              reset={LastNameInput.reset}
+              extraProps={{ style: { height: "32px" } }}
+              onBlurAction={(e) => { return e }}
+              isRequired={true}
+              disabled={false}
+            />
+          </div>
+          <div className="mb-5" >
+            <InputWithAddOnMultiple
+              label="Email"
+              placeholder=""
+              className="loginInputs w-full"
+              value={EmailInput.enteredValue ?? ''}
+              setValue={EmailInput.setEnteredValue}
+              setIsTouched={EmailInput.setIsTouched}
+              feedbackMessage={EmailInput.feedbackMessage}
+              feedbackType={EmailInput.messageType}
+              isTouched={EmailInput.isTouched}
+              validateHandler={EmailValidator}
+              reset={EmailInput.reset}
+              extraProps={{ style: { height: "32px" } }}
+              onBlurAction={(e) => { return e }}
+              isRequired={true}
+              disabled={false}
+            />
+          </div>
 
 
-            <div className="mb-3" >
-              <InputSelect
-                setValue={setSelectlanguage}
-                label="Select Language"
-                value={selectlanguage}
-                options={getRoleResponse?.data}
-                isTouched={selectlanguageischeck}
-                setIsTouched={setSelectlanguageischeck}
-                labelClassName="text-weight-bold h6"
-                className="py-1 "
-                isRequired={true}
-                feedbackMessage={languageFeedbackMessage?.message}
-                feedbackType={languageFeedbackMessage?.type}
-                validateHandler={languageSelectValidater}
-              />
-            </div>
-            <div className="mb-3" >
-              <InputWithAddOnMultiple
-                label="Phone Number"
-                placeholder=""
-                className="loginInputs w-full"
-                value={PhoneNumberInput.enteredValue ?? ''}
-                setValue={PhoneNumberInput.setEnteredValue}
-                setIsTouched={PhoneNumberInput.setIsTouched}
-                feedbackMessage={PhoneNumberInput.feedbackMessage}
-                feedbackType={PhoneNumberInput.messageType}
-                isTouched={PhoneNumberInput.isTouched}
-                validateHandler={PhoneNumberValidator}
-                reset={PhoneNumberInput.reset}
-                extraProps={{ style: { height: "32px" } }}
-                onBlurAction={(e) => { return e }}
-                isRequired={true}
-                disabled={false}
-              />
-            </div>
-            <div className="mb-3" >
-              <InputWithAddOnMultiple
-                label="Password"
-                placeholder=""
-                className="loginInputs w-full"
-                value={PasswordInput.enteredValue ?? ''}
-                setValue={PasswordInput.setEnteredValue}
-                setIsTouched={PasswordInput.setIsTouched}
-                feedbackMessage={PasswordInput.feedbackMessage}
-                feedbackType={PasswordInput.messageType}
-                isTouched={PasswordInput.isTouched}
-                validateHandler={PasswordValidator}
-                reset={PasswordInput.reset}
-                extraProps={{ style: { height: "32px" } }}
-                onBlurAction={(e) => { return e }}
-                isRequired={true}
-                disabled={false}
-              />
-            </div>
-            <div className="mb-3" >
-              <Label style={{ fontSize: "0.9rem" }} >Gender</Label>
+          <div className="mb-5" >
+            <DateTimeInputMultiple
+              label="Date of Birth"
+              className="datetime-input-format-type-1"
+              value={DobInput.enteredValue ?? ''}
+              setValue={DobInput.setEnteredValue}
+              setIsTouched={DobInput.setIsTouched}
+              feedbackMessage={DobInput.feedbackMessage}
+              feedbackType={DobInput.messageType}
+              isTouched={DobInput.isTouched}
+              validateHandler={DobValidator}
+              reset={DobInput.reset}
+              dateFormat={"YYYY-MM-DD"}
+              timeFormat={false}
+              extraProps={{ style: { width: "100%", height: "32px" } }}
+              heightClass="small"
+              isRequired={true}
+              inputProps={{
+                placeholder: "YYYY-MM-DD",
+              }}
+              onBlurAction={(e) => {
+                return e
+
+              }}
+              momentFormat={"YYYY-MM-DD"}
+            />
+
+          </div>
+
+
+          <div className="mb-5" >
+            <InputSelect
+              setValue={setSelectRole}
+              label="Select Role"
+              value={selectRole}
+              options={getRoleResponse?.data}
+              isTouched={selectRoleischeck}
+              setIsTouched={setSelectRoleischeck}
+              labelClassName="text-weight-bold h6"
+              className="py-1 "
+              isRequired={true}
+              feedbackMessage={RoleFeedbackMessage?.message}
+              feedbackType={RoleFeedbackMessage?.type}
+              validateHandler={RoleSelectValidater}
+            />
+          </div>
+          <div className="mb-5" >
+            <InputWithAddOnMultiple
+              label="Phone Number"
+              placeholder=""
+              className="loginInputs w-full"
+              value={PhoneNumberInput.enteredValue ?? ''}
+              setValue={PhoneNumberInput.setEnteredValue}
+              setIsTouched={PhoneNumberInput.setIsTouched}
+              feedbackMessage={PhoneNumberInput.feedbackMessage}
+              feedbackType={PhoneNumberInput.messageType}
+              isTouched={PhoneNumberInput.isTouched}
+              validateHandler={PhoneNumberValidator}
+              reset={PhoneNumberInput.reset}
+              extraProps={{ style: { height: "32px" } }}
+              onBlurAction={(e) => { return e }}
+              isRequired={true}
+              disabled={false}
+            />
+          </div>
+          <div className="mb-5" >
+            <InputWithAddOnMultiple
+              label="Password"
+              placeholder=""
+              className="loginInputs w-full"
+              value={PasswordInput.enteredValue ?? ''}
+              setValue={PasswordInput.setEnteredValue}
+              setIsTouched={PasswordInput.setIsTouched}
+              feedbackMessage={PasswordInput.feedbackMessage}
+              feedbackType={PasswordInput.messageType}
+              isTouched={PasswordInput.isTouched}
+              validateHandler={PasswordValidator}
+              reset={PasswordInput.reset}
+              extraProps={{ style: { height: "32px" } }}
+              onBlurAction={(e) => { return e }}
+              isRequired={true}
+              disabled={false}
+            />
+          </div>
+
+          <div className="mb-5" >
+            <Label style={{ fontSize: "0.9rem" }} >Gender</Label>
+            <div className="grid grid-cols-8  mt-2  " >
               <div>
                 <CheckboxInput
                   setChecked={() => { changegander("male") }}
@@ -403,25 +649,22 @@ return (
                   id={"female_gender"}
                 />
               </div>
+
             </div>
-
-
-
           </div>
-          <div className="flex justify-end space-x-2">
-            <Dialog.Close asChild>
-              <button type="button" className="px-4 mb-3 border rounded">Cancel</button>
-            </Dialog.Close>
-            <button
-              type="submit"
-              className="px-4 mb-3 bg-black text-white text-[16px] font-bold rounded disabled:opacity-50"
-            >
-              Save changes
-            </button>
-          </div>
-        </form>
-      </Dialog.Content>
-    </Dialog.Portal>
-  </Dialog.Root>
-);
+        </div>
+        <div className="flex justify-end space-x-2">
+          <button onClick={() => { navigate("/users") }} type="button" className="px-4 mb-5 border rounded">Cancel</button>
+
+          <button
+            type="submit"
+            className="px-4 mb-5 bg-black text-white text-[16px] font-bold rounded disabled:opacity-50"
+          >
+            Save changes
+          </button>
+        </div>
+      </form>
+    </div>
+
+  );
 }
