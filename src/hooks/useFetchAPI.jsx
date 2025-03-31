@@ -108,8 +108,8 @@ const useFetchAPI = (
     setFetching(true);
     progressBarStart();
 
-        let fullurl = fullURL ?? "http://localhost:3000/api" + url;
-        let tokenHeader = {};
+    let fullurl = fullURL ?? "https://shipment-tracking-backend.vercel.app/api" + url;
+    let tokenHeader = {};
     if (authRequired) {
       tokenHeader.Authorization = `Bearer ${APIKey}`;
     }
