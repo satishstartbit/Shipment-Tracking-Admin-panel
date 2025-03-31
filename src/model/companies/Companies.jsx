@@ -65,15 +65,29 @@ const Companies = () => {
     { name: "CITY", key: "city" },
     { name: "STATE", key: "state" },
     { name: "COUNTRY", key: "country" },
+    { name: "USER NAME", key: "username" },
+    { name: "FIRST NAME", key: "first_name" },
+    { name: "LAST NAME", key: "last_name" },
+    { name: "MOBILE NUMBER", key: "mobile_no" },
   ]);
 
   useEffect(() => {
     setCustomColumns(
       (savedTableColumns ?? []).map((obj) => {
+
         return {
           name: obj?.name?.toUpperCase(),
           selector: (row) => {
+
+            let userDeatils = row["munshiId"]
             switch (obj?.key) {
+
+              case "username":
+              case "first_name":
+              case "last_name":
+              case "mobile_no":
+                return userDeatils[obj?.key]
+
               case "actions":
                 return <Popover asChild>
                   <PopoverTrigger asChild>

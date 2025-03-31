@@ -19,10 +19,12 @@ import {
   useSidebar,
 } from "../../components/ui/sidebar";
 import { LogOutAction } from "../../store/slices/LoginSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 export function NavUser({ user }) {
+  const { userDetails } = useSelector((state) => state.LoginReducer);
+
   const { isMobile } = useSidebar();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -32,6 +34,13 @@ export function NavUser({ user }) {
     dispatch(LogOutAction());  // This will reset the login state in the Redux store
     navigate("/login");        // Redirect to the login page
   };
+
+
+
+  const capitalizedFirstName = userDetails?.first_name.charAt(0).toUpperCase() + userDetails?.first_name.slice(1);
+  const capitalizedLastName = userDetails?.last_name.charAt(0).toUpperCase() + userDetails?.last_name.slice(1);
+
+  const result = capitalizedFirstName.charAt(0) + capitalizedLastName.charAt(0);
 
   return (
     <SidebarMenu>
@@ -44,7 +53,7 @@ export function NavUser({ user }) {
             >
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarImage src={user.avatar} alt={user.name} />
-                <AvatarFallback className="rounded-lg">SN</AvatarFallback>
+                <AvatarFallback className="rounded-lg">{result}</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold">{user.name}</span>
@@ -63,7 +72,7 @@ export function NavUser({ user }) {
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
                   <AvatarImage src={user.avatar} alt={user.name} />
-                  <AvatarFallback className="rounded-lg">SN</AvatarFallback>
+                  <AvatarFallback className="rounded-lg">{result}</AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">{user.name}</span>

@@ -12,8 +12,9 @@ const LoginSlice = createSlice({
   initialState,
   reducers: {
     LoginAction: (state, action) => {
-      const { email, accessToken, refreshToken } = action.payload;
+      const { email, accessToken, refreshToken, user } = action.payload;
       state.IsLoggedIn = true;
+      state.userDetails = user
       LocalStorageHelper.setItem("email", email);
       LocalStorageHelper.setItem("accessToken", accessToken);
       LocalStorageHelper.setItem("refreshToken", refreshToken);
@@ -26,6 +27,7 @@ const LoginSlice = createSlice({
     },
     LogOutAction: (state) => {
       state.IsLoggedIn = false;
+      state.userDetails = {}
       LocalStorageHelper.setItem("email");
       LocalStorageHelper.setItem("accessToken");
       LocalStorageHelper.setItem("refreshToken");

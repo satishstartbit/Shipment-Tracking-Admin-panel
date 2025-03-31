@@ -57,16 +57,15 @@ const LoginUser = () => {
             authRequired: true,
         },
         (e) => {
-            console.log(e);
-
             dispatch(
                 LoginAction({
                     email: EmailInput.enteredValue,
                     accessToken: e?.accessToken,
-                    refreshToken: e?.refreshToken
+                    refreshToken: e?.refreshToken,
+                    user:e?.user
                 })
             );
-            navigate("/users")
+            navigate("/companies")
             return e;
         },
         (e) => {
