@@ -440,10 +440,39 @@ export function AddCompany() {
         );
 
 
+
+
+    const [UpdateCompanyResponse, UpdateCompanyHandler] =
+        useFetchAPI(
+            {
+                url: "/company/update",
+                method: "POST",
+            },
+            (e) => {
+                NotificationAlert(
+                    "success",
+                    "Transport Company has been updated successfully."
+                );
+                navigate("/companies")
+                reset()
+                return e;
+            },
+            (e) => {
+                let message =
+                    "Something went wrong while logging out. please try again.";
+                if (typeof e?.response?.data === "string") {
+                    message = e?.response?.data;
+                } else if (typeof e?.response?.data?.message === "string") {
+                    message = e?.response?.data?.message;
+                }
+                NotificationAlert("error", message);
+            }
+        );
+
+
     // Handle Submit 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
 
         let isCompanyNameValidator = CompanyNameValidator(CompanyNameInput.enteredValue)
         let isCityeValidator = CityeValidator(CityeInput.enteredValue)
@@ -475,26 +504,52 @@ export function AddCompany() {
             );
         } else {
 
+            if (CompanyId) {
 
-            await CreateCompanyHandler({
-                body: {
-                    company_name: CompanyNameInput.enteredValue,
-                    city: CityeInput.enteredValue,
-                    state: StateInput.enteredValue,
-                    country: CountyInput.enteredValue,
+                await UpdateCompanyHandler({
+                    body: {
+                        company_id: CompanyId,
+                        company_name: CompanyNameInput.enteredValue,
+                        city: CityeInput.enteredValue,
+                        state: StateInput.enteredValue,
+                        country: CountyInput.enteredValue,
 
-                    first_name: FirstNameInput.enteredValue,
-                    last_name: LastNameInput.enteredValue,
-                    email: EmailInput.enteredValue,
-                    password: PasswordInput.enteredValue,
-                    mobile_no: PhoneNumberInput.enteredValue,
-                    gender: Gender,
-                    dob: DobInput.enteredValue,
-                    roleid: "67e2942f30f69ed5e93b2c89",
-                    avatar: "df",
-                    username: UserNameInput.enteredValue
-                },
-            });
+                        first_name: FirstNameInput.enteredValue,
+                        last_name: LastNameInput.enteredValue,
+                        email: EmailInput.enteredValue,
+                        password: PasswordInput.enteredValue,
+                        mobile_no: PhoneNumberInput.enteredValue,
+                        gender: Gender,
+                        dob: DobInput.enteredValue,
+                        roleid: "67e2942f30f69ed5e93b2c89",
+                        avatar: "df",
+                        username: UserNameInput.enteredValue
+                    },
+                });
+            } else {
+
+                await CreateCompanyHandler({
+                    body: {
+                        company_name: CompanyNameInput.enteredValue,
+                        city: CityeInput.enteredValue,
+                        state: StateInput.enteredValue,
+                        country: CountyInput.enteredValue,
+
+                        first_name: FirstNameInput.enteredValue,
+                        last_name: LastNameInput.enteredValue,
+                        email: EmailInput.enteredValue,
+                        password: PasswordInput.enteredValue,
+                        mobile_no: PhoneNumberInput.enteredValue,
+                        gender: Gender,
+                        dob: DobInput.enteredValue,
+                        roleid: "67e2942f30f69ed5e93b2c89",
+                        avatar: "df",
+                        username: UserNameInput.enteredValue
+                    },
+                });
+            }
+
+
         }
 
     };

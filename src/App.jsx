@@ -6,7 +6,7 @@ import LayoutMain from "./layouts/layout/LayoutMain"; // Replace with your actua
 import { ToastContainer } from "react-toastify"; // Import ToastContainer for notifications
 import { Tooltip } from "react-tooltip"; // Import Tooltip component for tooltips
 import "react-toastify/dist/ReactToastify.css"; // Ensure the ToastContainer styles are imported
-import { LogOutAction, RefreshLoginAction } from "../src/store/slices/LoginSlice";
+import { LoginAction, LogOutAction, RefreshLoginAction } from "../src/store/slices/LoginSlice";
 // import useFetchAPI from "./hooks/useFetchAPI";
 import { isExpired } from "react-jwt";
 import LocalStorageHelper from "./services/LocalStorageHelper";
@@ -16,48 +16,29 @@ function App() {
   const dispatch = useDispatch();
 
 
-  // // Define your Refresh API Hook
-  // const [RefreshResponse, RefreshHandler] = useFetchAPI(
-  //   {
-  //     url: '/user/refresh',
-  //     method: 'POST',
-  //     authRequired: false,
-  //     isRefreshCall: true,
-  //   },
-  //   (e) => {
-  //     console.log("sdf");
-  //     dispatch(
-  //       RefreshLoginAction({
-  //         accessToken: e?.accessToken
-  //       })
-  //     );
-  //     return e;
-  //   },
-  //   (e) => {
-  //     if (e?.response?.data === 'Invalid Refresh Token' || e?.response?.data === 'Refresh Token has been revoked') {
-  //       dispatch(LogOutAction());
-  //     }
-  //     return e?.response ?? true;
-  //   }
-  // );
+
 
   // Define the function to handle token refresh flow
   const starterFunction = async () => {
     console.log("isTokenExpired");
 
-    const token = LocalStorageHelper.getItem('accessToken'); // This may return null  
-    console.log("token", token);
+    const token = LocalStorageHelper.getItem('accessToken'); // This may return null
+    const user = LocalStorageHelper.getItem('user'); // This may return null  
+
 
     const refreshToken = LocalStorageHelper.getItem('refreshToken');
     // Check if the token exists and if it is expired
     const isTokenExpired = token ? isExpired(token) : true;
 
-    console.log("isTokenExpired", isTokenExpired);
 
     if (!isTokenExpired) {
-      // If the access token is expired, use refresh token to get a new access token
-      let body = { refreshToken: refreshToken };
-      // await RefreshHandler({ body: body });
+      dispatch(
+        LoginAction({
+          accessToken: token,
+          refreshToken: refreshToken,
+          user: user
+        })
+      )
     } else {
       dispatch(LogOutAction());
     }
@@ -94,7 +75,7 @@ function App() {
         ) : (
           // If logged in, show the main layout
           <Routes>
-            <Route path="/*" element={<LayoutMain />} />
+            <Route path="/*" to="/users" element={<LayoutMain />} />
           </Routes>
         )}
       </BrowserRouter>

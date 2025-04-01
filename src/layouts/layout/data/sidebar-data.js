@@ -32,15 +32,16 @@ export const sidebarData = {
       title: 'General',
       items: [
         {
-          title: 'Companies',
-          url: '/companies',
-          icon: IconChecklist,
-        },
-        {
           title: 'Users',
           url: '/users',
           icon: IconUsers,
         },
+        {
+          title: 'Companies',
+          url: '/companies',
+          icon: IconChecklist,
+        },
+
       ],
     },
 

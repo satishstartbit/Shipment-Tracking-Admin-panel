@@ -45,20 +45,19 @@ export function AddUserDialog() {
 
 
 
-  // useEffect(() => {
-  //     if (getCompanyDetailsFetchHandler?.data) {
-
-
-  //         let users = getCompanyDetailsFetchHandler?.data?.user[0];
-  //         FirstNameInput.setEnteredValue(users.first_name)
-  //         LastNameInput.setEnteredValue(users.last_name)
-  //         EmailInput.setEnteredValue(users.email)
-  //         PasswordInput.setEnteredValue(users.password)
-  //         PhoneNumberInput.setEnteredValue(users.mobile_no)
-  //         DobInput.setEnteredValue(users.dob)
-  //         UserNameInput.setEnteredValue(users.username)
-  //     }
-  // }, [getCompanyDetailsFetchHandler?.data])
+  useEffect(() => {
+    if (getCompanyDetailsFetchHandler?.data) {
+      let users = getCompanyDetailsFetchHandler?.data?.user;
+      FirstNameInput.setEnteredValue(users.first_name)
+      LastNameInput.setEnteredValue(users.last_name)
+      EmailInput.setEnteredValue(users.email)
+      PasswordInput.setEnteredValue(users.password)
+      PhoneNumberInput.setEnteredValue(users.mobile_no)
+      DobInput.setEnteredValue(users.dob)
+      UserNameInput.setEnteredValue(users.username)
+      setSelectRole(users?.roleid?._id)
+    }
+  }, [getCompanyDetailsFetchHandler?.data])
 
 
 
@@ -413,6 +412,36 @@ export function AddUserDialog() {
     );
 
 
+
+
+  const [updateUserResponse, updateUserHandler] =
+    useFetchAPI(
+      {
+        url: "/users/updateuser",
+        method: "POST",
+      },
+      (e) => {
+        NotificationAlert(
+          "success",
+          "User has been updated successfully."
+        );
+        navigate("/users")
+        reset()
+        return e;
+      },
+      (e) => {
+        let message =
+          "Something went wrong while logging out. please try again.";
+        if (typeof e?.response?.data === "string") {
+          message = e?.response?.data;
+        } else if (typeof e?.response?.data?.message === "string") {
+          message = e?.response?.data?.message;
+        }
+        NotificationAlert("error", message);
+      }
+    );
+
+
   // Handle Submit
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -425,30 +454,50 @@ export function AddUserDialog() {
     let isPasswordValidator = PasswordValidator(PasswordInput.enteredValue)
     let isDobValidator = DobValidator(DobInput.enteredValue)
     let isUserNameValidator = UserNameValidator(UserNameInput.enteredValue)
+    let isRoleSelectValidater = RoleSelectValidater(selectRole)
 
     if (!isFirstNameValidator || !isLastNameValidator || !isEmailValidator ||
-      !isPhoneNumberValidator || !isPasswordValidator || !isDobValidator || !isUserNameValidator) {
+      !isPhoneNumberValidator || !isPasswordValidator || !isDobValidator ||
+      !isUserNameValidator || !isRoleSelectValidater
+    ) {
       NotificationAlert(
         "error",
         "Please enter all information before proceeding."
       );
     } else {
 
+      if (UserId) {
+        await updateUserHandler({
+          body: {
+            userId: UserId,
+            first_name: FirstNameInput.enteredValue,
+            last_name: LastNameInput.enteredValue,
+            email: EmailInput.enteredValue,
+            password: PasswordInput.enteredValue,
+            mobile_no: PhoneNumberInput.enteredValue,
+            gender: Gender,
+            dob: DobInput.enteredValue,
+            roleid: selectRole,
+            username: UserNameInput.enteredValue
+          },
+        });
+      } else {
+        await CreateUserHandler({
+          body: {
+            first_name: FirstNameInput.enteredValue,
+            last_name: LastNameInput.enteredValue,
+            email: EmailInput.enteredValue,
+            password: PasswordInput.enteredValue,
+            mobile_no: PhoneNumberInput.enteredValue,
+            gender: Gender,
+            dob: DobInput.enteredValue,
+            roleid: selectRole,
+            avatar: "df",
+            username: UserNameInput.enteredValue
+          },
+        });
+      }
 
-      await CreateUserHandler({
-        body: {
-          first_name: FirstNameInput.enteredValue,
-          last_name: LastNameInput.enteredValue,
-          email: EmailInput.enteredValue,
-          password: PasswordInput.enteredValue,
-          mobile_no: PhoneNumberInput.enteredValue,
-          gender: Gender,
-          dob: DobInput.enteredValue,
-          roleid: selectRole,
-          avatar: "df",
-          username: UserNameInput.enteredValue
-        },
-      });
     }
 
   };
@@ -457,9 +506,9 @@ export function AddUserDialog() {
 
   return (
     <div className="w-full p-5" >
-      <p className="text-lg font-semibold">Add New User</p>
+      <p className="text-lg font-semibold">{UserId ? "Update" : "Add New"} User</p>
       <p className="text-sm text-gray-500 mb-4">
-        Create a new user here. Click save when you’re done.
+        {UserId ? "Update" : "Create a new"}  user here. Click save when you’re done.
       </p>
       <form onSubmit={handleSubmit} >
 

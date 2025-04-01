@@ -19,11 +19,12 @@
   }
   
   .login-right {
-    background-image: url('/src/assets/img/ShipmentBanner2.jpg');
+    background-image: url('/src/assets/img/shipmentTruch.webp');
     color: white;
     align-items: center;
     text-align: center;
     position: relative;
+    background-size: cover;
   }
   
   .login-form {

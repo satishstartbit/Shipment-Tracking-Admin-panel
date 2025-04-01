@@ -107,6 +107,7 @@ const useFetchAPI = (
   const execute = async (newProps) => {
     setFetching(true);
     progressBarStart();
+    const token = LocalStorageHelper.getItem('accessToken'); // This may return null
 
     let fullurl = fullURL ?? "https://shipment-tracking-backend.vercel.app/api" + url;
     let tokenHeader = {};
@@ -117,6 +118,10 @@ const useFetchAPI = (
       "Content-Type": "application/json; charset=utf-8",
       ...tokenHeader
     };
+
+    if (token) {
+      newheaders.authorization = token
+    }
 
     let newparams = {};
     if (newProps?.params !== undefined && newProps?.params !== null) {

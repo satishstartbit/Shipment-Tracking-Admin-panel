@@ -9,8 +9,8 @@ import { LoginAction } from "../store/slices/LoginSlice";
 import "./LoginUser.css"; // Import the CSS
 import { useState } from "react";
 import useFetchAPI from "../hooks/useFetchAPI";
-// import { ReactComponent as EyeHideIcon } from "../assets/icons/EyeHideIcon.svg";
 
+import { FaEye, FaEyeSlash } from 'react-icons/fa'; // Example icons from react-icons
 
 const LoginUser = () => {
     const { IsMobileView } = useSelector(
@@ -62,10 +62,10 @@ const LoginUser = () => {
                     email: EmailInput.enteredValue,
                     accessToken: e?.accessToken,
                     refreshToken: e?.refreshToken,
-                    user:e?.user
+                    user: e?.user
                 })
             );
-            navigate("/companies")
+            navigate("/users")
             return e;
         },
         (e) => {
@@ -98,6 +98,7 @@ const LoginUser = () => {
     return (
         <div className="login-container">
             <div className="login-left">
+                <img style={{ width: "150px", marginBottom: "40px" }} src="http://localhost:5173/public/logo-campa.svg" />
                 <h2 className="mb-5 font-bold" >Shipment Tracking Admin Panel</h2>
                 <Form className="login-form mt-5" onSubmit={SubmitHandler}>
                     <InputWithAddOn
@@ -131,23 +132,23 @@ const LoginUser = () => {
                         reset={PasswordInput.reset}
                         label="Password"
                         validateHandler={PasswordValidator}
-                    // hasAddOn={{
-                    //     right: showPassword ? (
-                    //         <EyeHideIcon
-                    //             className="input_addon_icon_right"
-                    //             onClick={() => {
-                    //                 setShowPassword(false);
-                    //             }}
-                    //         />
-                    //     ) : (
-                    //         <EyeIcon
-                    //             className="input_addon_icon_right"
-                    //             onClick={() => {
-                    //                 setShowPassword(true);
-                    //             }}
-                    //         />
-                    //     ),
-                    // }}
+                        hasAddOn={{
+                            right: showPassword ? (
+                                <FaEyeSlash
+                                    className="input_addon_icon_right"
+                                    onClick={() => {
+                                        setShowPassword(false);
+                                    }}
+                                />
+                            ) : (
+                                <FaEye
+                                    className="input_addon_icon_right"
+                                    onClick={() => {
+                                        setShowPassword(true);
+                                    }}
+                                />
+                            ),
+                        }}
                     />
                     <div className="login-button-wrapper">
                         <button className="login-button" type="submit">
@@ -156,14 +157,14 @@ const LoginUser = () => {
                     </div>
                 </Form>
             </div>
-            {!IsMobileView && <div className="login-right">
+            {<div className="login-right">
 
                 <div className="login-right-text">
-                    <p className="small-text">Logging in is quick and easy!</p>
+                    {/* <p className="small-text">Logging in is quick and easy!</p>
                     <h3>
                         Need help with your account? <br />
                         We're here to assist you.
-                    </h3>
+                    </h3> */}
 
                 </div>
             </div>}
