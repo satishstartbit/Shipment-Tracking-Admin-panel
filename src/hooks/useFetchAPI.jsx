@@ -12,7 +12,7 @@ const useFetchAPI = (
     url = "",
     method = "GET",
     sendImmediately = false,
-    authRequired = true,
+    authRequired = false,
     params = null,
     body = null,
     headers = null,
@@ -121,7 +121,7 @@ const useFetchAPI = (
       ...tokenHeader
     };
 
-    if (method.toUpperCase() == "POST") {
+    if (authRequired && method.toUpperCase() == "POST") {
       headers["Content-Type"] = "multipart/form-data"
     }
 
