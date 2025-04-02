@@ -111,17 +111,17 @@ const useFetchAPI = (
 
     let fullurl = fullURL ?? "https://shipment-tracking-backend.vercel.app/api" + url;
     let tokenHeader = {};
-    if (authRequired) {
-      tokenHeader.Authorization = `Bearer ${APIKey}`;
+    if (token) {
+      tokenHeader.authorization = `Bearer ${token}`;
     }
     let newheaders = headers ? { ...headers, ...tokenHeader } : {
       "Content-Type": "application/json; charset=utf-8",
       ...tokenHeader
     };
 
-    if (token) {
-      newheaders.authorization = token
-    }
+    // if (token) {
+    //   newheaders.authorization = token
+    // }
 
     let newparams = {};
     if (newProps?.params !== undefined && newProps?.params !== null) {
