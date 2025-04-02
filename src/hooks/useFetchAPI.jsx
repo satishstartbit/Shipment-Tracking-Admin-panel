@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import LocalStorageHelper from "../services/LocalStorageHelper";
 import {
   progressBarStart,
@@ -18,13 +17,11 @@ const useFetchAPI = (
     headers = null,
     isAsync = false,
     isRefreshCall = false,
-    data: dataPassedWhenCalled = null,
     haltRequest = false,
   },
   dataTransform = null,
   errorTransform = null
 ) => {
-  const { APIKey } = useSelector((state) => state.LoginReducer);
   const [fetching, setFetching] = useState(false);
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);

@@ -7,17 +7,25 @@ import { useSelector, useDispatch } from "react-redux";
 import { LoginAction } from "../store/slices/LoginSlice";
 
 import "./LoginUser.css"; // Import the CSS
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useFetchAPI from "../hooks/useFetchAPI";
 
 import { FaEye, FaEyeSlash } from 'react-icons/fa'; // Example icons from react-icons
 
 const LoginUser = () => {
-    const { IsMobileView } = useSelector(
-        (state) => state.SideBarReducer
-    );
+    const { IsLoggedIn } = useSelector((state) => state.LoginReducer);
+
+
+
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (IsLoggedIn) {
+            navigate("/users")
+        }
+    }, [IsLoggedIn])
 
     const [showPassword, setShowPassword] = useState(false)
 

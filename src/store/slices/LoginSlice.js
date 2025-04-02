@@ -12,7 +12,7 @@ const LoginSlice = createSlice({
   initialState,
   reducers: {
     LoginAction: (state, action) => {
-      const { email, accessToken, refreshToken, user } = action.payload;
+      const {  accessToken, refreshToken, user } = action.payload;
       state.IsLoggedIn = true;
       state.userDetails = user
       LocalStorageHelper.setItem("user", user);
@@ -31,7 +31,6 @@ const LoginSlice = createSlice({
       LocalStorageHelper.setItem("user");
       LocalStorageHelper.setItem("accessToken");
       LocalStorageHelper.setItem("refreshToken");
-
     },
   },
 });

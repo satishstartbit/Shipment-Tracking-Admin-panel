@@ -37,8 +37,8 @@ export function NavUser({ user }) {
 
 
 
-  const capitalizedFirstName = userDetails?.first_name.charAt(0).toUpperCase() + userDetails?.first_name.slice(1);
-  const capitalizedLastName = userDetails?.last_name.charAt(0).toUpperCase() + userDetails?.last_name.slice(1);
+  const capitalizedFirstName = (userDetails ?? {})?.first_name?.charAt(0)?.toUpperCase() + userDetails?.first_name?.slice(1);
+  const capitalizedLastName = (userDetails ?? {})?.last_name?.charAt(0)?.toUpperCase() + userDetails?.last_name?.slice(1);
 
   const result = capitalizedFirstName.charAt(0) + capitalizedLastName.charAt(0);
 

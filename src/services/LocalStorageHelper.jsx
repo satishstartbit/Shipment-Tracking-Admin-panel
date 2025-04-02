@@ -2,7 +2,9 @@ const LocalStorageHelper = {
   getItem: (key) => {
     try {
       const item = localStorage.getItem(key);
+
       return JSON.parse(item);
+
     } catch (error) {
       return error;
     }

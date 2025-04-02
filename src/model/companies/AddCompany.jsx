@@ -7,6 +7,7 @@ import CheckboxInput from "../../components/forminputs/CheckboxInput"
 import DateTimeInputMultiple from "../../components/date-time/DateTimeInputMultiple";
 import { Label } from "reactstrap";
 import { useEffect, useState } from "react";
+import { Spinner } from "reactstrap";
 
 export function AddCompany() {
     const navigate = useNavigate();
@@ -556,288 +557,285 @@ export function AddCompany() {
 
 
 
-    return (
-        <div className="w-full p-5" >
-            <p className="text-lg font-semibold"> {CompanyId ? "Edit" : "Add New"} Transport Company</p>
+    return getCompanyDetailsFetchHandler?.fetching ? <div style={{textAlign:"center"}}> <Spinner /> </div> : <div className="w-full p-5" >
+        <p className="text-lg font-semibold"> {CompanyId ? "Edit" : "Add New"} Transport Company</p>
+        <p className="text-sm text-gray-500 mb-4">
+            {CompanyId ? "Edit" : "Create a new"} Transport Company here. Click save when you’re done.
+        </p>
+        <form onSubmit={handleSubmit} >
+
+            <div className="my-5 grid grid-cols-2 gap-4" >
+
+                <div className="mb-5" >
+                    <InputWithAddOnMultiple
+                        label="Transport Company Name"
+                        placeholder=""
+                        className="loginInputs  w-full"
+                        value={CompanyNameInput.enteredValue ?? ''}
+                        setValue={CompanyNameInput.setEnteredValue}
+                        setIsTouched={CompanyNameInput.setIsTouched}
+                        feedbackMessage={CompanyNameInput.feedbackMessage}
+                        feedbackType={CompanyNameInput.messageType}
+                        isTouched={CompanyNameInput.isTouched}
+                        validateHandler={CompanyNameValidator}
+                        reset={CompanyNameInput.reset}
+                        extraProps={{ style: { height: "32px" } }}
+                        onBlurAction={(e) => { return e }}
+                        isRequired={true}
+                        disabled={false}
+                    />
+                </div>
+
+                <div className="mb-5" >
+                    <InputWithAddOnMultiple
+                        label="City"
+                        placeholder=""
+                        className="loginInputs w-full"
+                        value={CityeInput.enteredValue ?? ''}
+                        setValue={CityeInput.setEnteredValue}
+                        setIsTouched={CityeInput.setIsTouched}
+                        feedbackMessage={CityeInput.feedbackMessage}
+                        feedbackType={CityeInput.messageType}
+                        isTouched={CityeInput.isTouched}
+                        validateHandler={CityeValidator}
+                        reset={CityeInput.reset}
+                        extraProps={{ style: { height: "32px" } }}
+                        onBlurAction={(e) => { return e }}
+                        isRequired={true}
+                        disabled={false}
+                    />
+                </div>
+                <div className="mb-5" >
+                    <InputWithAddOnMultiple
+                        label="State"
+                        placeholder=""
+                        className="loginInputs w-full"
+                        value={StateInput.enteredValue ?? ''}
+                        setValue={StateInput.setEnteredValue}
+                        setIsTouched={StateInput.setIsTouched}
+                        feedbackMessage={StateInput.feedbackMessage}
+                        feedbackType={StateInput.messageType}
+                        isTouched={StateInput.isTouched}
+                        validateHandler={StateValidator}
+                        reset={StateInput.reset}
+                        extraProps={{ style: { height: "32px" } }}
+                        onBlurAction={(e) => { return e }}
+                        isRequired={true}
+                        disabled={false}
+                    />
+                </div>
+
+                <div className="mb-5" >
+                    <InputWithAddOnMultiple
+                        label="County"
+                        placeholder=""
+                        className="loginInputs w-full"
+                        value={CountyInput.enteredValue ?? ''}
+                        setValue={CountyInput.setEnteredValue}
+                        setIsTouched={CountyInput.setIsTouched}
+                        feedbackMessage={CountyInput.feedbackMessage}
+                        feedbackType={CountyInput.messageType}
+                        isTouched={CountyInput.isTouched}
+                        validateHandler={CountyValidator}
+                        reset={CountyInput.reset}
+                        extraProps={{ style: { height: "32px" } }}
+                        onBlurAction={(e) => { return e }}
+                        isRequired={true}
+                        disabled={false}
+                    />
+                </div>
+
+
+            </div>
+
+            <p className="text-lg font-semibold"> {CompanyId ? "Edit" : "Add"} User</p>
             <p className="text-sm text-gray-500 mb-4">
-                {CompanyId ? "Edit" : "Create a new"} Transport Company here. Click save when you’re done.
+                {CompanyId ? "Edit user" : "Create a new user"} here and connect with Transport Company.
             </p>
-            <form onSubmit={handleSubmit} >
 
-                <div className="my-5 grid grid-cols-2 gap-4" >
+            <div className="my-5 grid grid-cols-2 gap-4" >
+                <div className="mb-5" >
+                    <InputWithAddOnMultiple
+                        label="User Name"
+                        placeholder=""
+                        className="loginInputs  w-full"
+                        value={UserNameInput.enteredValue ?? ''}
+                        setValue={UserNameInput.setEnteredValue}
+                        setIsTouched={UserNameInput.setIsTouched}
+                        feedbackMessage={UserNameInput.feedbackMessage}
+                        feedbackType={UserNameInput.messageType}
+                        isTouched={UserNameInput.isTouched}
+                        validateHandler={UserNameValidator}
+                        reset={UserNameInput.reset}
+                        extraProps={{ style: { height: "32px" } }}
+                        onBlurAction={(e) => { return e }}
+                        isRequired={true}
+                        disabled={CompanyId ? true : false}
+                    />
+                </div>
+                <div className="mb-5" >
+                    <InputWithAddOnMultiple
+                        label="First Name"
+                        placeholder=""
+                        className="loginInputs  w-full"
+                        value={FirstNameInput.enteredValue ?? ''}
+                        setValue={FirstNameInput.setEnteredValue}
+                        setIsTouched={FirstNameInput.setIsTouched}
+                        feedbackMessage={FirstNameInput.feedbackMessage}
+                        feedbackType={FirstNameInput.messageType}
+                        isTouched={FirstNameInput.isTouched}
+                        validateHandler={FirstNameValidator}
+                        reset={FirstNameInput.reset}
+                        extraProps={{ style: { height: "32px" } }}
+                        onBlurAction={(e) => { return e }}
+                        isRequired={true}
+                        disabled={false}
+                    />
+                </div>
 
-                    <div className="mb-5" >
-                        <InputWithAddOnMultiple
-                            label="Transport Company Name"
-                            placeholder=""
-                            className="loginInputs  w-full"
-                            value={CompanyNameInput.enteredValue ?? ''}
-                            setValue={CompanyNameInput.setEnteredValue}
-                            setIsTouched={CompanyNameInput.setIsTouched}
-                            feedbackMessage={CompanyNameInput.feedbackMessage}
-                            feedbackType={CompanyNameInput.messageType}
-                            isTouched={CompanyNameInput.isTouched}
-                            validateHandler={CompanyNameValidator}
-                            reset={CompanyNameInput.reset}
-                            extraProps={{ style: { height: "32px" } }}
-                            onBlurAction={(e) => { return e }}
-                            isRequired={true}
-                            disabled={false}
-                        />
-                    </div>
+                <div className="mb-5" >
+                    <InputWithAddOnMultiple
+                        label="Last Name"
+                        placeholder=""
+                        className="loginInputs w-full"
+                        value={LastNameInput.enteredValue ?? ''}
+                        setValue={LastNameInput.setEnteredValue}
+                        setIsTouched={LastNameInput.setIsTouched}
+                        feedbackMessage={LastNameInput.feedbackMessage}
+                        feedbackType={LastNameInput.messageType}
+                        isTouched={LastNameInput.isTouched}
+                        validateHandler={LastNameValidator}
+                        reset={LastNameInput.reset}
+                        extraProps={{ style: { height: "32px" } }}
+                        onBlurAction={(e) => { return e }}
+                        isRequired={true}
+                        disabled={false}
+                    />
+                </div>
+                <div className="mb-5" >
+                    <InputWithAddOnMultiple
+                        label="Email"
+                        placeholder=""
+                        className="loginInputs w-full"
+                        value={EmailInput.enteredValue ?? ''}
+                        setValue={EmailInput.setEnteredValue}
+                        setIsTouched={EmailInput.setIsTouched}
+                        feedbackMessage={EmailInput.feedbackMessage}
+                        feedbackType={EmailInput.messageType}
+                        isTouched={EmailInput.isTouched}
+                        validateHandler={EmailValidator}
+                        reset={EmailInput.reset}
+                        extraProps={{ style: { height: "32px" } }}
+                        onBlurAction={(e) => { return e }}
+                        isRequired={true}
+                        disabled={false}
+                    />
+                </div>
 
-                    <div className="mb-5" >
-                        <InputWithAddOnMultiple
-                            label="City"
-                            placeholder=""
-                            className="loginInputs w-full"
-                            value={CityeInput.enteredValue ?? ''}
-                            setValue={CityeInput.setEnteredValue}
-                            setIsTouched={CityeInput.setIsTouched}
-                            feedbackMessage={CityeInput.feedbackMessage}
-                            feedbackType={CityeInput.messageType}
-                            isTouched={CityeInput.isTouched}
-                            validateHandler={CityeValidator}
-                            reset={CityeInput.reset}
-                            extraProps={{ style: { height: "32px" } }}
-                            onBlurAction={(e) => { return e }}
-                            isRequired={true}
-                            disabled={false}
-                        />
-                    </div>
-                    <div className="mb-5" >
-                        <InputWithAddOnMultiple
-                            label="State"
-                            placeholder=""
-                            className="loginInputs w-full"
-                            value={StateInput.enteredValue ?? ''}
-                            setValue={StateInput.setEnteredValue}
-                            setIsTouched={StateInput.setIsTouched}
-                            feedbackMessage={StateInput.feedbackMessage}
-                            feedbackType={StateInput.messageType}
-                            isTouched={StateInput.isTouched}
-                            validateHandler={StateValidator}
-                            reset={StateInput.reset}
-                            extraProps={{ style: { height: "32px" } }}
-                            onBlurAction={(e) => { return e }}
-                            isRequired={true}
-                            disabled={false}
-                        />
-                    </div>
 
-                    <div className="mb-5" >
-                        <InputWithAddOnMultiple
-                            label="County"
-                            placeholder=""
-                            className="loginInputs w-full"
-                            value={CountyInput.enteredValue ?? ''}
-                            setValue={CountyInput.setEnteredValue}
-                            setIsTouched={CountyInput.setIsTouched}
-                            feedbackMessage={CountyInput.feedbackMessage}
-                            feedbackType={CountyInput.messageType}
-                            isTouched={CountyInput.isTouched}
-                            validateHandler={CountyValidator}
-                            reset={CountyInput.reset}
-                            extraProps={{ style: { height: "32px" } }}
-                            onBlurAction={(e) => { return e }}
-                            isRequired={true}
-                            disabled={false}
-                        />
-                    </div>
+                <div className="mb-5" >
+                    <DateTimeInputMultiple
+                        label="Date of Birth"
+                        className="datetime-input-format-type-1"
+                        value={DobInput.enteredValue ?? ''}
+                        setValue={DobInput.setEnteredValue}
+                        setIsTouched={DobInput.setIsTouched}
+                        feedbackMessage={DobInput.feedbackMessage}
+                        feedbackType={DobInput.messageType}
+                        isTouched={DobInput.isTouched}
+                        validateHandler={DobValidator}
+                        reset={DobInput.reset}
+                        dateFormat={"YYYY-MM-DD"}
+                        timeFormat={false}
+                        extraProps={{ style: { width: "100%", height: "32px" } }}
+                        heightClass="small"
+                        isRequired={true}
+                        inputProps={{
+                            placeholder: "YYYY-MM-DD",
+                        }}
+                        onBlurAction={(e) => {
+                            return e
 
+                        }}
+                        momentFormat={"YYYY-MM-DD"}
+                    />
 
                 </div>
 
-                <p className="text-lg font-semibold"> {CompanyId ? "Edit" : "Add"} User</p>
-                <p className="text-sm text-gray-500 mb-4">
-                    {CompanyId ? "Edit user" : "Create a new user"} here and connect with Transport Company.
-                </p>
-
-                <div className="my-5 grid grid-cols-2 gap-4" >
-                    <div className="mb-5" >
-                        <InputWithAddOnMultiple
-                            label="User Name"
-                            placeholder=""
-                            className="loginInputs  w-full"
-                            value={UserNameInput.enteredValue ?? ''}
-                            setValue={UserNameInput.setEnteredValue}
-                            setIsTouched={UserNameInput.setIsTouched}
-                            feedbackMessage={UserNameInput.feedbackMessage}
-                            feedbackType={UserNameInput.messageType}
-                            isTouched={UserNameInput.isTouched}
-                            validateHandler={UserNameValidator}
-                            reset={UserNameInput.reset}
-                            extraProps={{ style: { height: "32px" } }}
-                            onBlurAction={(e) => { return e }}
-                            isRequired={true}
-                            disabled={CompanyId ? true : false}
-                        />
-                    </div>
-                    <div className="mb-5" >
-                        <InputWithAddOnMultiple
-                            label="First Name"
-                            placeholder=""
-                            className="loginInputs  w-full"
-                            value={FirstNameInput.enteredValue ?? ''}
-                            setValue={FirstNameInput.setEnteredValue}
-                            setIsTouched={FirstNameInput.setIsTouched}
-                            feedbackMessage={FirstNameInput.feedbackMessage}
-                            feedbackType={FirstNameInput.messageType}
-                            isTouched={FirstNameInput.isTouched}
-                            validateHandler={FirstNameValidator}
-                            reset={FirstNameInput.reset}
-                            extraProps={{ style: { height: "32px" } }}
-                            onBlurAction={(e) => { return e }}
-                            isRequired={true}
-                            disabled={false}
-                        />
-                    </div>
-
-                    <div className="mb-5" >
-                        <InputWithAddOnMultiple
-                            label="Last Name"
-                            placeholder=""
-                            className="loginInputs w-full"
-                            value={LastNameInput.enteredValue ?? ''}
-                            setValue={LastNameInput.setEnteredValue}
-                            setIsTouched={LastNameInput.setIsTouched}
-                            feedbackMessage={LastNameInput.feedbackMessage}
-                            feedbackType={LastNameInput.messageType}
-                            isTouched={LastNameInput.isTouched}
-                            validateHandler={LastNameValidator}
-                            reset={LastNameInput.reset}
-                            extraProps={{ style: { height: "32px" } }}
-                            onBlurAction={(e) => { return e }}
-                            isRequired={true}
-                            disabled={false}
-                        />
-                    </div>
-                    <div className="mb-5" >
-                        <InputWithAddOnMultiple
-                            label="Email"
-                            placeholder=""
-                            className="loginInputs w-full"
-                            value={EmailInput.enteredValue ?? ''}
-                            setValue={EmailInput.setEnteredValue}
-                            setIsTouched={EmailInput.setIsTouched}
-                            feedbackMessage={EmailInput.feedbackMessage}
-                            feedbackType={EmailInput.messageType}
-                            isTouched={EmailInput.isTouched}
-                            validateHandler={EmailValidator}
-                            reset={EmailInput.reset}
-                            extraProps={{ style: { height: "32px" } }}
-                            onBlurAction={(e) => { return e }}
-                            isRequired={true}
-                            disabled={false}
-                        />
-                    </div>
 
 
-                    <div className="mb-5" >
-                        <DateTimeInputMultiple
-                            label="Date of Birth"
-                            className="datetime-input-format-type-1"
-                            value={DobInput.enteredValue ?? ''}
-                            setValue={DobInput.setEnteredValue}
-                            setIsTouched={DobInput.setIsTouched}
-                            feedbackMessage={DobInput.feedbackMessage}
-                            feedbackType={DobInput.messageType}
-                            isTouched={DobInput.isTouched}
-                            validateHandler={DobValidator}
-                            reset={DobInput.reset}
-                            dateFormat={"YYYY-MM-DD"}
-                            timeFormat={false}
-                            extraProps={{ style: { width: "100%", height: "32px" } }}
-                            heightClass="small"
-                            isRequired={true}
-                            inputProps={{
-                                placeholder: "YYYY-MM-DD",
-                            }}
-                            onBlurAction={(e) => {
-                                return e
-
-                            }}
-                            momentFormat={"YYYY-MM-DD"}
-                        />
-
-                    </div>
-
-
-
-                    <div className="mb-5" >
-                        <InputWithAddOnMultiple
-                            label="Phone Number"
-                            placeholder=""
-                            className="loginInputs w-full"
-                            value={PhoneNumberInput.enteredValue ?? ''}
-                            setValue={PhoneNumberInput.setEnteredValue}
-                            setIsTouched={PhoneNumberInput.setIsTouched}
-                            feedbackMessage={PhoneNumberInput.feedbackMessage}
-                            feedbackType={PhoneNumberInput.messageType}
-                            isTouched={PhoneNumberInput.isTouched}
-                            validateHandler={PhoneNumberValidator}
-                            reset={PhoneNumberInput.reset}
-                            extraProps={{ style: { height: "32px" } }}
-                            onBlurAction={(e) => { return e }}
-                            isRequired={true}
-                            disabled={false}
-                        />
-                    </div>
-                    <div className="mb-5" >
-                        <InputWithAddOnMultiple
-                            label="Password"
-                            placeholder=""
-                            className="loginInputs w-full"
-                            value={PasswordInput.enteredValue ?? ''}
-                            setValue={PasswordInput.setEnteredValue}
-                            setIsTouched={PasswordInput.setIsTouched}
-                            feedbackMessage={PasswordInput.feedbackMessage}
-                            feedbackType={PasswordInput.messageType}
-                            isTouched={PasswordInput.isTouched}
-                            validateHandler={PasswordValidator}
-                            reset={PasswordInput.reset}
-                            extraProps={{ style: { height: "32px" } }}
-                            onBlurAction={(e) => { return e }}
-                            isRequired={true}
-                            disabled={false}
-                        />
-                    </div>
-                    <div className="mb-5" >
-                        <Label style={{ fontSize: "0.9rem" }} >Gender</Label>
-                        <div className="grid grid-cols-8  mt-2  " >
-                            <div>
-                                <CheckboxInput
-                                    setChecked={() => { changegander("male") }}
-                                    check={Gender === "male"}
-                                    label={"Male"}
-                                    id={"male_gender"}
-                                />
-                            </div>
-                            <div>
-                                <CheckboxInput
-                                    setChecked={() => {
-                                        changegander("female")
-                                    }}
-                                    check={Gender === "female"}
-                                    label={"Female"}
-                                    id={"female_gender"}
-                                />
-                            </div>
+                <div className="mb-5" >
+                    <InputWithAddOnMultiple
+                        label="Phone Number"
+                        placeholder=""
+                        className="loginInputs w-full"
+                        value={PhoneNumberInput.enteredValue ?? ''}
+                        setValue={PhoneNumberInput.setEnteredValue}
+                        setIsTouched={PhoneNumberInput.setIsTouched}
+                        feedbackMessage={PhoneNumberInput.feedbackMessage}
+                        feedbackType={PhoneNumberInput.messageType}
+                        isTouched={PhoneNumberInput.isTouched}
+                        validateHandler={PhoneNumberValidator}
+                        reset={PhoneNumberInput.reset}
+                        extraProps={{ style: { height: "32px" } }}
+                        onBlurAction={(e) => { return e }}
+                        isRequired={true}
+                        disabled={false}
+                    />
+                </div>
+                <div className="mb-5" >
+                    <InputWithAddOnMultiple
+                        label="Password"
+                        placeholder=""
+                        className="loginInputs w-full"
+                        value={PasswordInput.enteredValue ?? ''}
+                        setValue={PasswordInput.setEnteredValue}
+                        setIsTouched={PasswordInput.setIsTouched}
+                        feedbackMessage={PasswordInput.feedbackMessage}
+                        feedbackType={PasswordInput.messageType}
+                        isTouched={PasswordInput.isTouched}
+                        validateHandler={PasswordValidator}
+                        reset={PasswordInput.reset}
+                        extraProps={{ style: { height: "32px" } }}
+                        onBlurAction={(e) => { return e }}
+                        isRequired={true}
+                        disabled={false}
+                    />
+                </div>
+                <div className="mb-5" >
+                    <Label style={{ fontSize: "0.9rem" }} >Gender</Label>
+                    <div className="grid grid-cols-8  mt-2  " >
+                        <div>
+                            <CheckboxInput
+                                setChecked={() => { changegander("male") }}
+                                check={Gender === "male"}
+                                label={"Male"}
+                                id={"male_gender"}
+                            />
+                        </div>
+                        <div>
+                            <CheckboxInput
+                                setChecked={() => {
+                                    changegander("female")
+                                }}
+                                check={Gender === "female"}
+                                label={"Female"}
+                                id={"female_gender"}
+                            />
                         </div>
                     </div>
                 </div>
-                <div className="flex justify-end space-x-2">
-                    <button onClick={() => { navigate("/companies") }} type="button" className="px-4 mb-5 border rounded">Cancel</button>
+            </div>
+            <div className="flex justify-end space-x-2">
+                <button onClick={() => { navigate("/companies") }} type="button" className="px-4 mb-5 border rounded">Cancel</button>
 
-                    <button
-                        type="submit"
-                        className="px-4 mb-5 bg-black text-white text-[16px] font-bold rounded disabled:opacity-50"
-                    >
-                        {CompanyId ? "Update" : "Save changes"}
-                    </button>
-                </div>
-            </form>
-        </div>
-
-    );
+                <button
+                    type="submit"
+                    className="px-4 mb-5 bg-black text-white text-[16px] font-bold rounded disabled:opacity-50"
+                >
+                    {CompanyId ? "Update" : "Save changes"}
+                </button>
+            </div>
+        </form>
+    </div>
 }

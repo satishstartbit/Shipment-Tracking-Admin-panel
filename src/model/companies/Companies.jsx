@@ -5,10 +5,8 @@ import useFetchAPI from "../../hooks/useFetchAPI";
 import ThemeDataTable1 from "../../components/data-table/ThemeDataTable1"
 import { useNavigate } from "react-router-dom";
 import { Popover, PopoverTrigger, PopoverContent } from "../../components/ui/popover";
-
 const Companies = () => {
   const navigate = useNavigate();
-
 
   const [inputSearch, setInputSearch] = useState("");
   const [pageNo, setPageNo] = useState(1);

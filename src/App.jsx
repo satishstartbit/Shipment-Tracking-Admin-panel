@@ -6,7 +6,7 @@ import LayoutMain from "./layouts/layout/LayoutMain"; // Replace with your actua
 import { ToastContainer } from "react-toastify"; // Import ToastContainer for notifications
 import { Tooltip } from "react-tooltip"; // Import Tooltip component for tooltips
 import "react-toastify/dist/ReactToastify.css"; // Ensure the ToastContainer styles are imported
-import { LoginAction, LogOutAction, RefreshLoginAction } from "../src/store/slices/LoginSlice";
+import { LoginAction, LogOutAction } from "../src/store/slices/LoginSlice";
 // import useFetchAPI from "./hooks/useFetchAPI";
 import { isExpired } from "react-jwt";
 import LocalStorageHelper from "./services/LocalStorageHelper";
@@ -16,50 +16,47 @@ function App() {
   const dispatch = useDispatch();
 
 
-
-
   // Define the function to handle token refresh flow
   const starterFunction = async () => {
-    console.log("isTokenExpired");
-
-    const token = LocalStorageHelper.getItem('accessToken'); // This may return null
-    const user = LocalStorageHelper.getItem('user'); // This may return null  
-
-
-    const refreshToken = LocalStorageHelper.getItem('refreshToken');
-    // Check if the token exists and if it is expired
-    const isTokenExpired = token ? isExpired(token) : true;
+    const token = LocalStorageHelper.getItem('accessToken') ?? null; // This may return null
+    const user = LocalStorageHelper.getItem('user') ?? null;// This may return null  
+    const refreshToken = LocalStorageHelper.getItem('refreshToken') ?? null;
 
 
-    if (!isTokenExpired) {
+    // Check if the token is expired
+    const isTokenExpired = isExpired(token); // Only check for expiration if token exists
+
+
+
+    if (!token || !user || !refreshToken) {
+      dispatch(LogOutAction());
+      return null
+    }
+
+
+    if (isTokenExpired) {
+
+      dispatch(LogOutAction());
+    } else {
       dispatch(
         LoginAction({
           accessToken: token,
           refreshToken: refreshToken,
           user: user
         })
-      )
-    } else {
-      dispatch(LogOutAction());
+      );
     }
   };
 
 
-  // const isTokenExpiredManually = (token) => {
-  //   try {
-  //     const decoded = isExpired(token);
-  //     const currentTime = Date.now() / 1000;  // Current time in seconds
-  //     return decoded.exp < currentTime; // Compare the expiration time with the current time
-  //   } catch (error) {
-  //     console.error('Error decoding token:', error);
-  //     return true;  // If the token is invalid or can't be decoded, consider it expired
-  //   }
-  // };
+
 
   // UseEffect to trigger starterFunction on initial load
   useEffect(() => {
     starterFunction();
-  }, []);  // The empty array ensures it runs only on initial mount
+  }, []);
+
+
 
 
   return (
@@ -75,7 +72,7 @@ function App() {
         ) : (
           // If logged in, show the main layout
           <Routes>
-            <Route path="/*" to="/users" element={<LayoutMain />} />
+            <Route path="/*"  element={<LayoutMain />} />
           </Routes>
         )}
       </BrowserRouter>

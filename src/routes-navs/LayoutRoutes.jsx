@@ -2,6 +2,8 @@ import Companies from "../model/companies/Companies";
 import User from "../model/user/User";
 import { AddUserDialog } from "../components/ui/userForm"
 import { AddCompany } from "../model/companies/AddCompany"
+import { Navigate } from "react-router";
+
 export const LayoutRoutes = [
   {
     path: "/companies",
@@ -34,7 +36,11 @@ export const LayoutRoutes = [
     element: <AddCompany />,
     roles: "*",
   },
-
+  {
+    path: "/*",
+    element: <Navigate to="/users" replace />,
+    roles: "*",
+  },
 ];
 
 

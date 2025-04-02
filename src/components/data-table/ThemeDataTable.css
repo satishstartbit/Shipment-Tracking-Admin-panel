@@ -50,23 +50,23 @@
   border: 1px solid #dddddd;
   min-height: 300px;
   border-radius: 8px;
-  display: flex;
   align-items: center;
+  padding-top: 120px;
 }
 
 .default-no-data-component {
   border: 1px solid #dddddd;
   min-height: 300px;
   border-radius: 8px;
-  display: flex;
   align-items: center;
+  padding-top: 120px;
 }
 .default-loading-component {
   border: 1px solid #dddddd;
   min-height: 300px;
   border-radius: 8px;
-  display: flex;
   align-items: center;
+  padding-top: 120px;
 }
 
 .dropdown-content input[type="checkbox"] {

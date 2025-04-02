@@ -11,7 +11,7 @@
 
 .input_addon_icon_left {
   position: absolute;
-  top: 50%;
+  top: 35%;
   transform: translateY(-50%);
   left: 10px;
   color: gray;
@@ -24,7 +24,7 @@
 .input_addon_icon_right {
   line-height: 18px;
   position: absolute;
-  top: 50%;
+  top: 35%;
   transform: translateY(-50%);
   right: 5px;
   color: gray;
