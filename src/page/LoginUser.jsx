@@ -53,8 +53,7 @@ const LoginUser = () => {
     const [LoginFetchResponse, LoginFetchHandler] = useFetchAPI(
         {
             url: `/users/login`,
-            method: "POST",
-            authRequired: true,
+            method: "POST"
         },
         (e) => {
             dispatch(

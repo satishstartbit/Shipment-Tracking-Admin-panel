@@ -121,7 +121,7 @@ const useFetchAPI = (
       ...tokenHeader
     };
 
-    if (method.toUpperCase() === "POST") {
+    if (method.toUpperCase() == "POST") {
       headers["Content-Type"] = "multipart/form-data"
     }
 
