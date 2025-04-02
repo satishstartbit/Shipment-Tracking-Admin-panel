@@ -111,6 +111,8 @@ const useFetchAPI = (
 
     let fullurl = fullURL ?? "https://shipment-tracking-backend.vercel.app/api" + url;
     let tokenHeader = {};
+
+
     if (token) {
       tokenHeader.authorization = `Bearer ${token}`;
     }
@@ -119,9 +121,9 @@ const useFetchAPI = (
       ...tokenHeader
     };
 
-    // if (token) {
-    //   newheaders.authorization = token
-    // }
+    if (method.toUpperCase() === "POST") {
+      headers["Content-Type"] = "multipart/form-data"
+    }
 
     let newparams = {};
     if (newProps?.params !== undefined && newProps?.params !== null) {
