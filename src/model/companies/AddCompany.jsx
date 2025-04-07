@@ -8,6 +8,8 @@ import DateTimeInputMultiple from "../../components/date-time/DateTimeInputMulti
 import { Label } from "reactstrap";
 import { useEffect, useState } from "react";
 import { Spinner } from "reactstrap";
+import { Country, State, City } from 'country-state-city';
+import InputSelect from "../../components/forminputs/Select/InputSelect"
 
 export function AddCompany() {
     const navigate = useNavigate();
@@ -49,9 +51,9 @@ export function AddCompany() {
         if (getCompanyDetailsFetchHandler?.data) {
             let company = getCompanyDetailsFetchHandler?.data
             CompanyNameInput.setEnteredValue(company?.company_name)
-            CityeInput.setEnteredValue(company?.city)
-            StateInput.setEnteredValue(company?.state)
-            CountyInput.setEnteredValue(company?.country)
+            setSelectedState(company?.state)
+            setSelectedCity(company?.city)
+
 
             let users = company?.munshiId;
             FirstNameInput.setEnteredValue(users.first_name)
@@ -85,48 +87,9 @@ export function AddCompany() {
     };
 
 
-    // Citye
-    let CityeInput = useInputComponent();
-    let CityeValidator = (value) => {
-        if (value === "" || !value) {
-            CityeInput.setFeedbackMessage("Field Required!");
-            CityeInput.setMessageType("error");
-            return false;
-        }
-        CityeInput.setFeedbackMessage("");
-        CityeInput.setMessageType("none");
-        return true;
-    };
-
-    // State
-    let StateInput = useInputComponent();
-    let StateValidator = (value) => {
-        if (value === "" || !value) {
-            StateInput.setFeedbackMessage("Field Required!");
-            StateInput.setMessageType("error");
-            return false;
-        }
-        StateInput.setFeedbackMessage("");
-        StateInput.setMessageType("none");
-        return true;
-    };
-
-
 
     // County
     let CountyInput = useInputComponent();
-    let CountyValidator = (value) => {
-
-        if (value === "" || !value) {
-            CountyInput.setFeedbackMessage("Field Required!");
-            CountyInput.setMessageType("error");
-            return false;
-        }
-        CountyInput.setFeedbackMessage("");
-        CountyInput.setMessageType("none");
-        return true;
-    };
-
 
 
 
@@ -390,9 +353,20 @@ export function AddCompany() {
 
     const reset = () => {
         CompanyNameInput.reset()
-        CityeInput.reset()
-        StateInput.reset()
-        CountyInput.reset()
+        setSelectedState()
+        setselectedStateischeck(false)
+        setStateFeedBackMessage({
+            type: "info",
+            message: "",
+        })
+
+        setSelectedCity()
+        setselectedCityischeck(false)
+        setCityFeedBackMessage({
+            type: "info",
+            message: "",
+        })
+
 
 
 
@@ -476,10 +450,9 @@ export function AddCompany() {
         e.preventDefault();
 
         let isCompanyNameValidator = CompanyNameValidator(CompanyNameInput.enteredValue)
-        let isCityeValidator = CityeValidator(CityeInput.enteredValue)
-        let isStateValidator = StateValidator(StateInput.enteredValue)
-        let isCountyValidator = CountyValidator(CountyInput.enteredValue)
 
+        let isStateSelectValidater = StateSelectValidater(selectedState)
+        let isCitySelectValidater = CitySelectValidater(selectedCity)
 
 
 
@@ -494,8 +467,7 @@ export function AddCompany() {
 
 
 
-        if (!isCompanyNameValidator || !isCityeValidator || !isStateValidator ||
-            !isCountyValidator ||
+        if (!isCompanyNameValidator || !isStateSelectValidater || !isCitySelectValidater ||
             !isFirstNameValidator || !isLastNameValidator || !isEmailValidator ||
             !isPhoneNumberValidator || !isPasswordValidator || !isDobValidator || !isUserNameValidator
         ) {
@@ -511,9 +483,9 @@ export function AddCompany() {
                     body: {
                         company_id: CompanyId,
                         company_name: CompanyNameInput.enteredValue,
-                        city: CityeInput.enteredValue,
-                        state: StateInput.enteredValue,
-                        country: CountyInput.enteredValue,
+                        city: selectedCity,
+                        state: selectedState,
+                        country: "IN",
 
                         first_name: FirstNameInput.enteredValue,
                         last_name: LastNameInput.enteredValue,
@@ -532,9 +504,9 @@ export function AddCompany() {
                 await CreateCompanyHandler({
                     body: {
                         company_name: CompanyNameInput.enteredValue,
-                        city: CityeInput.enteredValue,
-                        state: StateInput.enteredValue,
-                        country: CountyInput.enteredValue,
+                        city: selectedCity,
+                        state: selectedState,
+                        country: "IN",
 
                         first_name: FirstNameInput.enteredValue,
                         last_name: LastNameInput.enteredValue,
@@ -556,13 +528,85 @@ export function AddCompany() {
     };
 
 
+    const [states, setStates] = useState([]);
+    const [cities, setCities] = useState([]);
 
-    return getCompanyDetailsFetchHandler?.fetching ? <div style={{textAlign:"center"}}> <Spinner /> </div> : <div className="w-full p-5" >
+
+
+    const [selectedCountry, setSelectedCountry] = useState('IN');
+
+    const [selectedState, setSelectedState] = useState('');
+    const [selectedStateischeck, setselectedStateischeck] = useState(false);
+    const [StateFeedbackMessage, setStateFeedBackMessage] = useState({
+        type: "info",
+        message: "",
+    });
+    const StateSelectValidater = (value) => {
+        if (value === "" || !value) {
+            setStateFeedBackMessage({
+                type: "error",
+                message: "This field is required!",
+            });
+            return false;
+        }
+        setStateFeedBackMessage({ type: "info", message: "" });
+
+        return true;
+    };
+
+
+
+
+    const [selectedCity, setSelectedCity] = useState('');
+    const [selectedCityischeck, setselectedCityischeck] = useState(false);
+    const [CityFeedbackMessage, setCityFeedBackMessage] = useState({
+        type: "info",
+        message: "",
+    });
+    const CitySelectValidater = (value) => {
+        if (value === "" || !value) {
+            setCityFeedBackMessage({
+                type: "error",
+                message: "This field is required!",
+            });
+            return false;
+        }
+        setCityFeedBackMessage({ type: "info", message: "" });
+
+        return true;
+    };
+
+
+
+
+
+    useEffect(() => {
+        if (selectedCountry) {
+            // Get states for the selected country
+            setStates(State.getStatesOfCountry(selectedCountry));
+            setSelectedState(''); // Reset the state selection when country changes
+            setCities([]); // Reset cities
+        }
+    }, []);
+
+
+    useEffect(() => {
+        if (selectedState) {
+            // Get cities for the selected state
+            setCities(City.getCitiesOfState(selectedCountry, selectedState));
+            // setSelectedCity(''); // Reset city selection when state changes
+        }
+    }, [selectedState]);
+
+
+    return getCompanyDetailsFetchHandler?.fetching ? <div style={{ textAlign: "center" }}> <Spinner /> </div> : <div className="w-full p-5" >
         <p className="text-lg font-semibold"> {CompanyId ? "Edit" : "Add New"} Transport Company</p>
         <p className="text-sm text-gray-500 mb-4">
             {CompanyId ? "Edit" : "Create a new"} Transport Company here. Click save when you’re done.
         </p>
         <form onSubmit={handleSubmit} >
+
+
 
             <div className="my-5 grid grid-cols-2 gap-4" >
 
@@ -586,64 +630,71 @@ export function AddCompany() {
                     />
                 </div>
 
-                <div className="mb-5" >
-                    <InputWithAddOnMultiple
-                        label="City"
-                        placeholder=""
-                        className="loginInputs w-full"
-                        value={CityeInput.enteredValue ?? ''}
-                        setValue={CityeInput.setEnteredValue}
-                        setIsTouched={CityeInput.setIsTouched}
-                        feedbackMessage={CityeInput.feedbackMessage}
-                        feedbackType={CityeInput.messageType}
-                        isTouched={CityeInput.isTouched}
-                        validateHandler={CityeValidator}
-                        reset={CityeInput.reset}
-                        extraProps={{ style: { height: "32px" } }}
-                        onBlurAction={(e) => { return e }}
-                        isRequired={true}
-                        disabled={false}
-                    />
-                </div>
-                <div className="mb-5" >
-                    <InputWithAddOnMultiple
-                        label="State"
-                        placeholder=""
-                        className="loginInputs w-full"
-                        value={StateInput.enteredValue ?? ''}
-                        setValue={StateInput.setEnteredValue}
-                        setIsTouched={StateInput.setIsTouched}
-                        feedbackMessage={StateInput.feedbackMessage}
-                        feedbackType={StateInput.messageType}
-                        isTouched={StateInput.isTouched}
-                        validateHandler={StateValidator}
-                        reset={StateInput.reset}
-                        extraProps={{ style: { height: "32px" } }}
-                        onBlurAction={(e) => { return e }}
-                        isRequired={true}
-                        disabled={false}
-                    />
-                </div>
+
 
                 <div className="mb-5" >
                     <InputWithAddOnMultiple
                         label="County"
                         placeholder=""
                         className="loginInputs w-full"
-                        value={CountyInput.enteredValue ?? ''}
+                        value={"India"}
                         setValue={CountyInput.setEnteredValue}
-                        setIsTouched={CountyInput.setIsTouched}
-                        feedbackMessage={CountyInput.feedbackMessage}
-                        feedbackType={CountyInput.messageType}
-                        isTouched={CountyInput.isTouched}
-                        validateHandler={CountyValidator}
-                        reset={CountyInput.reset}
                         extraProps={{ style: { height: "32px" } }}
                         onBlurAction={(e) => { return e }}
-                        isRequired={true}
-                        disabled={false}
+                        disabled={true}
                     />
                 </div>
+
+
+                <div className="mb-5" >
+                    <InputSelect
+                        setValue={setSelectedState}
+                        label="Select State"
+                        value={selectedState}
+                        options={states?.map((item) => {
+                            return {
+                                value: item?.isoCode,
+                                label: item?.name
+                            }
+                        })}
+                        isTouched={selectedStateischeck}
+                        setIsTouched={setselectedStateischeck}
+                        labelClassName="text-weight-bold h6"
+                        className="py-1 "
+                        isRequired={true}
+                        feedbackMessage={StateFeedbackMessage?.message}
+                        feedbackType={StateFeedbackMessage?.type}
+                        validateHandler={StateSelectValidater}
+                    />
+                </div>
+
+
+
+
+
+                <div className="mb-5" >
+                    <InputSelect
+                        setValue={setSelectedCity}
+                        label="Select City"
+                        value={selectedCity}
+                        options={(cities ?? [])?.map((item) => {
+                            return {
+                                value: item?.name,
+                                label: item?.name
+                            }
+                        }) ?? []}
+                        isTouched={selectedCityischeck}
+                        setIsTouched={setselectedCityischeck}
+                        labelClassName="text-weight-bold h6"
+                        className="py-1 "
+                        isRequired={true}
+                        feedbackMessage={CityFeedbackMessage?.message}
+                        feedbackType={CityFeedbackMessage?.type}
+                        validateHandler={CitySelectValidater}
+                    />
+                </div>
+
+
 
 
             </div>
@@ -831,6 +882,7 @@ export function AddCompany() {
 
                 <button
                     type="submit"
+                    disabled={UpdateCompanyResponse?.fetching || CreateCompanyResponse?.fetching}
                     className="px-4 mb-5 bg-black text-white text-[16px] font-bold rounded disabled:opacity-50"
                 >
                     {CompanyId ? "Update" : "Save changes"}

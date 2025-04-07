@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-// import { UserFilters } from "../../components/ui/userFilters";
+import { UserFilters } from "../../components/ui/userFilters";
 import { Button } from "../../components/ui/button";
 import useFetchAPI from "../../hooks/useFetchAPI";
 import moment from "moment"
@@ -12,7 +12,7 @@ import NotificationAlert from "../../hooks/NotificationAlert";
 const User = () => {
   const navigate = useNavigate();
 
-  // const [selectedRole, setSelectedRole] = useState("");
+  const [selectedRole, setSelectedRole] = useState("");
 
   const [inputSearch, setInputSearch] = useState("");
   const [pageNo, setPageNo] = useState(1);
@@ -55,7 +55,6 @@ const User = () => {
         page_no: page,
         search: inputSearch,
         order: order.order,
-
       },
     });
     setPageNo(page);
@@ -186,17 +185,27 @@ const User = () => {
     );
   }, [savedTableColumns]);
 
+  useEffect(() => {
+    getUsersFetchHandler({
+      params: {
+        page_size: pageSize,
+        page_no: pageNo,
+        search: inputSearch,
+        order: order.order,
+      },
+    });
+  }, [selectedRole])
+
   return (
     <div className="p-6 bg-white shadow rounded-lg">
       <h2 className="text-[22px] font-semibold">Users</h2>
 
       <div className="flex justify-between items-center mb-5 mt-4 sm:flex-row sm:justify-between sm:items-center">
-        {/* <UserFilters
+        <UserFilters
           filter={inputSearch}
           setFilter={setInputSearch}
-          selectedRole={selectedRole}
           setSelectedRole={setSelectedRole}
-        /> */}
+        />
         <div>
 
         </div>

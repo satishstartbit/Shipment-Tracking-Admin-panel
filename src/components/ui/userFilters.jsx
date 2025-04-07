@@ -9,7 +9,7 @@ export function UserFilters({ filter, setFilter, selectedRole, setSelectedRole }
         placeholder="Filter users..."
         value={filter}
         onChange={(e) => setFilter(e.target.value)}
-        className="w-1/2"
+        className=""
       />
 
 

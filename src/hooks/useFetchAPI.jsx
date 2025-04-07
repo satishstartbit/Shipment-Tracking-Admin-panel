@@ -5,6 +5,9 @@ import {
   progressBarStart,
   progressBarStop,
 } from "../services/NavProgressHelper";
+import { LogOutAction } from "../store/slices/LoginSlice";
+import { useDispatch } from "react-redux";
+
 const useFetchAPI = (
   {
     fullURL = null,
@@ -22,6 +25,8 @@ const useFetchAPI = (
   dataTransform = null,
   errorTransform = null
 ) => {
+  const dispatch = useDispatch();
+
   const [fetching, setFetching] = useState(false);
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
@@ -58,7 +63,10 @@ const useFetchAPI = (
     setData(null);
   };
   const catchErrorHandler = (error) => {
-    console.log(error?.response);
+    console.log(error?.response?.data?.TokenExpired);
+    if (!error?.response?.data?.TokenExpired) {
+      dispatch(LogOutAction());
+    }
     if (!error?.response && error?.request) {
       let responseMessage = genrateErrorMessage(error);
       error.response = { data: { message: responseMessage } };
