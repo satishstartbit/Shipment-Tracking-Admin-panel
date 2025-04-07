@@ -24,7 +24,7 @@
   align-items: center;
   text-align: center;
   position: relative;
-  background-size: contain;
+  background-size: 100% auto;
   background-repeat: no-repeat;
   margin-top: 10%;
 }
@@ -91,5 +91,8 @@
 
   .login-image {
     width: 100%;
+    margin-top: 10%;
   }
+
+
 }
