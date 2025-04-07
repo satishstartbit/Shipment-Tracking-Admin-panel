@@ -96,9 +96,11 @@ const LoginUser = () => {
         if (!isEmailValidator || !isPasswordValidator) {
             console.log("wrong EmailInput and password")
         } else {
+
+
             LoginFetchHandler({
                 body: {
-                    email: EmailInput.enteredValue,
+                    email: EmailInput.enteredValue.toLowerCase(),
                     password: PasswordInput.enteredValue,
                     role_type: "admin"
                 }
