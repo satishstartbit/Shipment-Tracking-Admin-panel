@@ -1,34 +1,40 @@
+
+// Custom Hooks
 import useInputComponent from "../hooks/useInputComponent";
+import useFetchAPI from "../hooks/useFetchAPI";
+// Components
 import InputWithAddOn from "../components/forminputs/InputWithAddOn";
-// import { useState } from "react";
+// React & Redux imports
 import { useNavigate } from "react-router-dom";
 import { Form } from "reactstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { LoginAction } from "../store/slices/LoginSlice";
 
 import "./LoginUser.css"; // Import the CSS
+
 import { useEffect, useState } from "react";
-import useFetchAPI from "../hooks/useFetchAPI";
+
 
 import { FaEye, FaEyeSlash } from 'react-icons/fa'; // Example icons from react-icons
 
 const LoginUser = () => {
+    // Access login status from Redux store
     const { IsLoggedIn } = useSelector((state) => state.LoginReducer);
-
-
-
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    // Redirect to dashboard if already logged in
     useEffect(() => {
         if (IsLoggedIn) {
             navigate("/users")
         }
     }, [IsLoggedIn])
 
-    const [showPassword, setShowPassword] = useState(false)
+    // Toggle password visibility
+    const [showPassword, setShowPassword] = useState(false);
 
+    // Email input with validation
     const EmailInput = useInputComponent();
     let EmailValidator = (value) => {
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -42,6 +48,7 @@ const LoginUser = () => {
         return true;
     };
 
+    // Password input with validation
     const PasswordInput = useInputComponent();
     let PasswordValidator = (value) => {
         if (value.length < 6) {
@@ -54,10 +61,7 @@ const LoginUser = () => {
         return true;
     };
 
-
-
-
-
+    // Login API handler
     const [LoginFetchResponse, LoginFetchHandler] = useFetchAPI(
         {
             url: `/users/login`,
@@ -80,7 +84,7 @@ const LoginUser = () => {
         }
     );
 
-
+    // Form submission handler
     const SubmitHandler = (e) => {
         e.preventDefault();
         console.log("dfgdg");
