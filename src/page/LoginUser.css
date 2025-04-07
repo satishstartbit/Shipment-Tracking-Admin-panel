@@ -94,5 +94,7 @@
     width: 100%;
   }
 
-
+  .login-left{
+    padding: 0px 1rem;
+  }
 }
