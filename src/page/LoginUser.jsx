@@ -11,11 +11,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { LoginAction } from "../store/slices/LoginSlice";
 
 import "./LoginUser.css"; // Import the CSS
-
 import { useEffect, useState } from "react";
-
-
 import { FaEye, FaEyeSlash } from 'react-icons/fa'; // Example icons from react-icons
+
+
+import logo from "../assets/img/logo.png";
+
 
 const LoginUser = () => {
     // Access login status from Redux store
@@ -109,7 +110,7 @@ const LoginUser = () => {
     return (
         <div className="login-container">
             <div className="login-left">
-                <img style={{ width: "200px", marginLeft:"40px" }} src="../src/assets/img/logo.png" />
+                <img style={{ width: "200px", marginLeft: "40px" }} src={logo} />
                 <h2 className="mb-5 font-bold" >Shipment Tracking Admin Panel</h2>
                 <Form className="login-form mt-5" onSubmit={SubmitHandler}>
                     <InputWithAddOn
