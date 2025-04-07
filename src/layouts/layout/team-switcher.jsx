@@ -7,7 +7,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "../../components/ui/sidebar";
-import logo from "../../../public/logo-campa.svg";
+import logo from "../../assets/img/logo.png";
 
 export function TeamSwitcher() {
 
@@ -23,7 +23,7 @@ export function TeamSwitcher() {
               <div className="flex rounded-[20px] overflow-hidden  justify-center">
                 <img
                   src={logo}
-                  className="w-24 h-26 object-contain rounded-[20px] p-2"
+                  className="w-40 h-30 object-contain rounded-[20px] p-2"
                 />
               </div>
             </SidebarMenuButton>

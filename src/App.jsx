@@ -11,6 +11,8 @@ import { LoginAction, LogOutAction } from "../src/store/slices/LoginSlice";
 import { isExpired } from "react-jwt";
 import LocalStorageHelper from "./services/LocalStorageHelper";
 
+
+
 function App() {
   const { IsLoggedIn } = useSelector((state) => state.LoginReducer);
   const dispatch = useDispatch();
@@ -53,6 +55,7 @@ function App() {
 
   // UseEffect to trigger starterFunction on initial load
   useEffect(() => {
+
     starterFunction();
   }, []);
 

@@ -1,94 +1,95 @@
 .login-container {
-    display: flex;
-    height: 100vh;
-    width: 100%;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  }
-  
-  .login-left,
-  .login-right {
-    flex: 1;
-    padding: 3rem;
-    display: flex;
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.login-left,
+.login-right {
+  flex: 1;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.login-left {
+  background-color: #ffffff;
+}
+
+.login-right {
+  background-image: url('/src/assets/img/shipmentTruch.jpg');
+  color: white;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-top: 10%;
+}
+
+.login-form {
+  max-width: 400px;
+  width: 100%;
+}
+
+.login-input {
+  margin-bottom: 1.5rem;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  width: 100%;
+}
+
+.login-button-wrapper {
+  text-align: center;
+}
+
+.login-button {
+  background-color: #1f2221;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  width: 100%;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login-button:hover {
+  background-color: #019875;
+}
+
+.login-image {
+  width: 80%;
+  max-width: 350px;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+}
+
+.login-right-text h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.login-right-text .small-text {
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .login-container {
     flex-direction: column;
-    justify-content: center;
   }
-  
-  .login-left {
-    background-color: #ffffff;
-  }
-  
+
   .login-right {
-    background-image: url('/src/assets/img/shipmentTruch.webp');
-    color: white;
-    align-items: center;
-    text-align: center;
-    position: relative;
-    background-size: cover;
+    padding: 2rem;
   }
-  
-  .login-form {
-    max-width: 400px;
-    width: 100%;
-  }
-  
-  .login-input {
-    margin-bottom: 1.5rem;
-    padding: 0.75rem;
-    font-size: 1rem;
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
-    width: 100%;
-  }
-  
-  .login-button-wrapper {
-    text-align: center;
-  }
-  
-  .login-button {
-    background-color: #1f2221;
-    color: white;
-    border: none;
-    padding: 0.75rem 1.5rem;
-    font-size: 1rem;
-    border-radius: 8px;
-    width: 100%;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .login-button:hover {
-    background-color: #019875;
-  }
-  
+
   .login-image {
-    width: 80%;
-    max-width: 350px;
-    border-radius: 12px;
-    margin-bottom: 2rem;
+    width: 100%;
   }
-  
-  .login-right-text h3 {
-    font-size: 1.5rem;
-    font-weight: 600;
-  }
-  
-  .login-right-text .small-text {
-    font-size: 0.95rem;
-    margin-bottom: 0.5rem;
-  }
-  
-  @media (max-width: 768px) {
-    .login-container {
-      flex-direction: column;
-    }
-  
-    .login-right {
-      padding: 2rem;
-    }
-  
-    .login-image {
-      width: 100%;
-    }
-  }
-  
+}

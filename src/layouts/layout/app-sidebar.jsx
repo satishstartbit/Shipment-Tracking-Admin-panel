@@ -19,9 +19,9 @@ export function AppSidebar(props) {
 
 
   let user = {
-    name: userDetails?.first_name + " "+ userDetails?.last_name,
+    name: userDetails?.first_name + " " + userDetails?.last_name,
     email: userDetails?.email,
-    avatar: '/avatars/shadcn.jpg',
+    avatar: '../assets/img/logo.png',
   }
 
   return (

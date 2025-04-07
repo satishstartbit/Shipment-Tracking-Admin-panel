@@ -109,7 +109,7 @@ const LoginUser = () => {
     return (
         <div className="login-container">
             <div className="login-left">
-                <img style={{ width: "150px", marginBottom: "40px" }} src="http://localhost:5173/public/logo-campa.svg" />
+                <img style={{ width: "200px", marginLeft:"40px" }} src="../src/assets/img/logo.png" />
                 <h2 className="mb-5 font-bold" >Shipment Tracking Admin Panel</h2>
                 <Form className="login-form mt-5" onSubmit={SubmitHandler}>
                     <InputWithAddOn
