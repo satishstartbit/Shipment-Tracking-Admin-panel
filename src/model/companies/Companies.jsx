@@ -5,17 +5,20 @@ import useFetchAPI from "../../hooks/useFetchAPI";
 import ThemeDataTable1 from "../../components/data-table/ThemeDataTable1"
 import { useNavigate } from "react-router-dom";
 import { Popover, PopoverTrigger, PopoverContent } from "../../components/ui/popover";
+
 const Companies = () => {
   const navigate = useNavigate();
 
+  // State for search input
   const [inputSearch, setInputSearch] = useState("");
+  // Pagination state
   const [pageNo, setPageNo] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [order, setOrder] = useState({
     orderBy: "name",
     order: "DESC",
   });
-
+  // API call to fetch companies
   const [getUsersFetchResponse, getUsersFetchHandler] = useFetchAPI(
     {
       url: `/company`,
@@ -41,7 +44,8 @@ const Companies = () => {
   const retryOrRefreshAction = async () => {
     await getUsersFetchHandler();
   };
-
+  
+  // Handle page or row size change
   const changePageRowHandle = async (page, pageSizes) => {
     await getUsersFetchHandler({
       params: {
@@ -56,7 +60,7 @@ const Companies = () => {
     setPageSize(pageSizes);
   };
 
-
+  // Table column configuration
   const [savedTableColumns, setSavedTableColumns] = useState([
     { name: "ACTION", key: "actions" },
     { name: "TRANSPORT COMPANY NAME", key: "company_name" },
@@ -99,12 +103,8 @@ const Companies = () => {
                       </button>
                     </div>
 
-
-
                   </PopoverContent>
                 </Popover>
-
-
 
               default:
                 return (
