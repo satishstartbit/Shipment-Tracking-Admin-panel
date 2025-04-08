@@ -115,7 +115,7 @@ const useFetchAPI = (
     const token = LocalStorageHelper.getItem('accessToken'); // This may return null
     console.log(",dfgdgdgdgdg",import.meta.env.VITE_API_URL);
 
-    let fullurl = fullURL ?? "https://shipment-tracking-backend.vercel.app/api" + url;
+    let fullurl = fullURL ?? import.meta.env.VITE_API_URL + url;
     let tokenHeader = {};
 
 
