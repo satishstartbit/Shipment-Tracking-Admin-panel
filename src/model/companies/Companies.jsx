@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "../../components/ui/button";
 import useFetchAPI from "../../hooks/useFetchAPI";
-import ThemeDataTable1 from "../../components/data-table/ThemeDataTable1"
+import ThemeDataTable1 from "../../components/data-table/ThemeDataTable1";
 import { useNavigate } from "react-router-dom";
 import { Popover, PopoverTrigger, PopoverContent } from "../../components/ui/popover";
 
@@ -44,7 +44,7 @@ const Companies = () => {
   const retryOrRefreshAction = async () => {
     await getUsersFetchHandler();
   };
-  
+
   // Handle page or row size change
   const changePageRowHandle = async (page, pageSizes) => {
     await getUsersFetchHandler({
