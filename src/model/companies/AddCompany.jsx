@@ -15,8 +15,6 @@ export function AddCompany() {
     const navigate = useNavigate();
     const location = useLocation();
 
-
-
     const [CompanyId, setCompanyId] = useState(null)
     useEffect(() => {
         const match = location?.pathname.match(/:([a-f0-9]{24})/);
@@ -27,7 +25,6 @@ export function AddCompany() {
         }
 
     }, [location])
-
 
     const [getCompanyDetailsFetchHandler, getCompanyFetchHandler] = useFetchAPI(
         {
@@ -44,8 +41,6 @@ export function AddCompany() {
             return e?.response ?? true;
         }
     );
-
-
 
     useEffect(() => {
         if (getCompanyDetailsFetchHandler?.data) {
@@ -86,21 +81,10 @@ export function AddCompany() {
         return true;
     };
 
-
-
     // County
     let CountyInput = useInputComponent();
 
-
-
-
-
-
     // add user details 
-
-
-
-
 
     let UserNameInput = useInputComponent();
     let UserNameValidator = (value) => {
@@ -318,9 +302,6 @@ export function AddCompany() {
         return true;
     };
 
-
-
-
     // Date of Birth (DOB)
     let DobInput = useInputComponent();
     let DobValidator = (value) => {
@@ -348,9 +329,6 @@ export function AddCompany() {
 
     }
 
-
-
-
     const reset = () => {
         CompanyNameInput.reset()
         setSelectedState()
@@ -367,9 +345,6 @@ export function AddCompany() {
             message: "",
         })
 
-
-
-
         UserNameInput.reset()
         FirstNameInput.reset()
         LastNameInput.reset()
@@ -380,12 +355,9 @@ export function AddCompany() {
 
     }
 
-
     useEffect(() => {
         reset()
     }, [])
-
-
 
     const [CreateCompanyResponse, CreateCompanyHandler] =
         useFetchAPI(
@@ -413,8 +385,6 @@ export function AddCompany() {
                 NotificationAlert("error", message);
             }
         );
-
-
 
 
     const [UpdateCompanyResponse, UpdateCompanyHandler] =
@@ -453,9 +423,6 @@ export function AddCompany() {
 
         let isStateSelectValidater = StateSelectValidater(selectedState)
         let isCitySelectValidater = CitySelectValidater(selectedCity)
-
-
-
 
         let isFirstNameValidator = FirstNameValidator(FirstNameInput.enteredValue)
         let isLastNameValidator = LastNameValidator(LastNameInput.enteredValue)
@@ -531,8 +498,6 @@ export function AddCompany() {
     const [states, setStates] = useState([]);
     const [cities, setCities] = useState([]);
 
-
-
     const [selectedCountry, setSelectedCountry] = useState('IN');
 
     const [selectedState, setSelectedState] = useState('');
@@ -555,8 +520,6 @@ export function AddCompany() {
     };
 
 
-
-
     const [selectedCity, setSelectedCity] = useState('');
     const [selectedCityischeck, setselectedCityischeck] = useState(false);
     const [CityFeedbackMessage, setCityFeedBackMessage] = useState({
@@ -575,10 +538,6 @@ export function AddCompany() {
 
         return true;
     };
-
-
-
-
 
     useEffect(() => {
         if (selectedCountry) {
@@ -606,8 +565,6 @@ export function AddCompany() {
         </p>
         <form onSubmit={handleSubmit} >
 
-
-
             <div className="my-5 grid grid-cols-2 gap-4" >
 
                 <div className="mb-5" >
@@ -629,7 +586,6 @@ export function AddCompany() {
                         disabled={false}
                     />
                 </div>
-
 
 
                 <div className="mb-5" >
@@ -667,9 +623,6 @@ export function AddCompany() {
                         validateHandler={StateSelectValidater}
                     />
                 </div>
-
-
-
 
 
                 <div className="mb-5" >
