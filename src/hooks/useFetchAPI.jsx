@@ -8,12 +8,6 @@ import {
 import { LogOutAction } from "../store/slices/LoginSlice";
 import { useDispatch } from "react-redux";
 
-/**
- * Custom hook for making API requests with built-in state management and error handling
- * Supports GET, POST, PUT, DELETE methods with automatic token handling and progress indicators
- * Returns [{ data, fetching, error }, execute] where execute can be called to make the API request
- */
-
 const useFetchAPI = (
   {
     fullURL = null,
@@ -119,9 +113,8 @@ const useFetchAPI = (
     setFetching(true);
     progressBarStart();
     const token = LocalStorageHelper.getItem('accessToken'); // This may return null
-    console.log("import.meta.env.VITE_API_URL", process.env.VITE_API_URL);
-    
-    let fullurl = fullURL ?? process.env.VITE_API_URL + url;
+
+    let fullurl = fullURL ?? "https://shipment-tracking-backend.vercel.app/api" + url;
     let tokenHeader = {};
 
 
