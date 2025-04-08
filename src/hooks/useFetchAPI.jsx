@@ -119,6 +119,8 @@ const useFetchAPI = (
     setFetching(true);
     progressBarStart();
     const token = LocalStorageHelper.getItem('accessToken'); // This may return null
+    console.log("import.meta.env.VITE_API_URL", import.meta.env.VITE_API_URL);
+    
     let fullurl = fullURL ?? import.meta.env.VITE_API_URL + url;
     let tokenHeader = {};
 
