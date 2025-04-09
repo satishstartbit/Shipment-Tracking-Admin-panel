@@ -1,36 +1,33 @@
-import { FormGroup, Input } from "reactstrap";  // Import FormGroup and Input from Reactstrap
-import "./InputWithAddOn.css";  // Import custom CSS styles for the input
-import uuid from "react-uuid";  // Import uuid for generating unique IDs
-import { useEffect, useState } from "react";  // Import React hooks for managing state and side effects
-
-// InputWithAddOnMultiple component - allows multiple dynamic form group behaviors, including custom validation and add-ons
+import { FormGroup, Input } from "reactstrap";
+import "./InputWithAddOn.css";
+import uuid from "react-uuid";
+import { useEffect, useState } from "react";
 const InputWithAddOnMultiple = ({
-  hasAddOn = null,  // Add-on elements (e.g., left or right icons/text to be added to the input)
-  value = "",  // The current value of the input field
-  setValue,  // Function to update the value of the input field
-  placeholder = "",  // Placeholder text for the input field
-  feedbackMessage = "",  // Feedback message like error/success
-  feedbackType = "none",  // Type of feedback (none, success, error)
-  isTouched = false,  // Whether the input has been touched
-  setIsTouched,  // Function to set the touched state
-  label = "",  // Label text for the input field
-  validateHandler = null,  // Optional validation handler function
-  disabled,  // Flag to disable the input
-  type = "text",  // The type of input field (text, number, integer)
-  className = "",  // Custom CSS class for styling
-  isRequired = false,  // Flag to mark the input as required
-  name = null,  // Name attribute for the input field
-  id = null,  // ID for the input field
-  extraProps = {},  // Additional props to be passed to the input
-  onBlurAction = () => { },  // Custom action to run on blur (when the input loses focus)
-  dynamicFormGroup = null,  // Optionally provide a custom FormGroup element for dynamic form groups
+  hasAddOn = null,
+  value = "",
+  setValue,
+  placeholder = "",
+  feedbackMessage = "",
+  feedbackType = "none",
+  isTouched = false,
+  setIsTouched,
+  label = "",
+  validateHandler = null,
+  disabled,
+  type = "text",
+  className = "",
+  isRequired = false,
+  name = null,
+  id = null,
+  extraProps = {},
+  onBlurAction = () => { },
+  dynamicFormGroup = null,
 }) => {
-  const DynamicElement = dynamicFormGroup ?? FormGroup; // If dynamicFormGroup is provided, use it, otherwise use FormGroup
-  const [uuidName, setUuidName] = useState(null); // State for generating unique UUID for the input's id
-  // useEffect hook to generate a unique ID if neither 'id' nor 'name' is provided
+  const DynamicElement = dynamicFormGroup ?? FormGroup;
+  const [uuidName, setUuidName] = useState(null);
   useEffect(() => {
     if (!id || !name) {
-      setUuidName(uuid()); // Set a unique ID if none is provided
+      setUuidName(uuid());
     }
   }, []);
 

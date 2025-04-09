@@ -1,34 +1,33 @@
-import React, { useEffect, useState } from "react";  // Importing React and hooks
-import Datetime from "react-datetime";  // Importing Datetime picker component
-import "react-datetime/css/react-datetime.css";  // Importing the CSS for the Datetime component
-import uuid from "react-uuid";  // Importing uuid to generate unique identifiers
-import { FormGroup } from "reactstrap";  // Importing FormGroup from Reactstrap for form grouping
-import "../forminputs/InputWithAddOn.css";  // Importing custom CSS for the input with add-ons
-import { ReactComponent as CancelIcon } from "../../assets/icons/Cancel.svg";  // Importing cancel icon as React component
-import { ReactComponent as CalendarIcon } from "../../assets/icons/CalendarIcon.svg";  // Importing calendar icon as React component
-import moment from "moment";  // Importing moment.js for date manipulation
+import React, { useEffect, useState } from "react";
+import Datetime from "react-datetime";
+import "react-datetime/css/react-datetime.css";
+import uuid from "react-uuid";
+import { FormGroup } from "reactstrap";
+import "../forminputs/InputWithAddOn.css";
+import { ReactComponent as CancelIcon } from "../../assets/icons/Cancel.svg";
+import { ReactComponent as CalendarIcon } from "../../assets/icons/CalendarIcon.svg";
+import moment from "moment";
 const DateTimeInput = ({
-  value = "",  // Default value for the input
-  setValue,  // Function to update the value
-  feedbackMessage = "",  // Feedback message to display under the input
-  feedbackType = "none",  // Type of feedback (none, error, etc.)
-  isTouched = false,  // Flag to check if the field has been interacted with
-  setIsTouched,  // Function to set the touched state
-  label = "",  // Label for the input
-  validateHandler = null,  // Validation handler function
-  className = "",  // Additional CSS classes for styling
-  isRequired = false,  // Whether the field is required
-  name = null,  // Name attribute for the input
-  id = null,  // ID attribute for the input
-  inputProps = {},  // Additional input props
-  momentFormat = "",  // Moment.js format for the input value
-  disabled = false,  // Whether the input is disabled
-  ...extraProps  // Any other extra properties passed
+  value = "",
+  setValue,
+  feedbackMessage = "",
+  feedbackType = "none",
+  isTouched = false,
+  setIsTouched,
+  label = "",
+  validateHandler = null,
+  className = "",
+  isRequired = false,
+  name = null,
+  id = null,
+  inputProps = {},
+  momentFormat = "",
+  disabled = false,
+  ...extraProps
 }) => {
  
-  const [uuidName, setUuidName] = useState(null); // State to hold a unique UUID for the input
+  const [uuidName, setUuidName] = useState(null);
   useEffect(() => {
-     // Generate UUID if id or name is not provided
     if (!id || !name) {
       setUuidName(uuid());
     }

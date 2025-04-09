@@ -1,41 +1,41 @@
 
-import React, { useEffect, useState } from "react";  // Import React and hooks
-import Datetime from "react-datetime";  // Import Datetime component for date/time selection
-import "react-datetime/css/react-datetime.css";  // Import CSS for Datetime component
-import uuid from "react-uuid";  // Import UUID for generating unique identifiers
-import { FormGroup } from "reactstrap";  // Import FormGroup from Reactstrap for form grouping
-import "../forminputs/InputWithAddOn.css";  // Import custom CSS for the input with add-ons
-import moment from "moment";  // Import Moment.js for date formatting and manipulation
+import React, { useEffect, useState } from "react";
+import Datetime from "react-datetime";
+import "react-datetime/css/react-datetime.css";
+import uuid from "react-uuid";
+import { FormGroup } from "reactstrap";
+import "../forminputs/InputWithAddOn.css";
+// import { ReactComponent as CancelIcon } from "../../assets/icons/Cancel.svg";
+// import { ReactComponent as CalendarIcon } from "../../assets/icons/CalendarIcon.svg";
+import moment from "moment";
 const DateTimeInputMultiple = ({
-  value = "",  // Default value for the input
-  setValue,  // Function to update the value
-  feedbackMessage = "",  // Feedback message to show (error or success)
-  feedbackType = "none",  // Type of feedback (error, none, etc.)
-  isTouched = false,  // Flag to check if the input was interacted with
-  setIsTouched = () => { },  // Function to set touched state
-  label = "",  // Label for the input
-  validateHandler = null,  // Validation handler to call on value change
-  className = "",  // Additional class names for styling
-  isRequired = false,  // Whether the field is required
-  name = null,  // Name attribute for the input
-  id = null,  // ID attribute for the input
-  inputProps = {},  // Additional properties to pass to the input
-  momentFormat = "",  // Moment.js format string for formatting the date
-  onBlurAction = () => { },  // Action to take on blur event
-  disabled = false,  // Whether the input is disabled or not
-  ...extraProps  // Any other extra props
+  value = "",
+  setValue,
+  feedbackMessage = "",
+  feedbackType = "none",
+  isTouched = false,
+  setIsTouched = () => {},
+  label = "",
+  validateHandler = null,
+  className = "",
+  isRequired = false,
+  name = null,
+  id = null,
+  inputProps = {},
+  momentFormat = "",
+  onBlurAction = () => {},
+  disabled = false,
+  ...extraProps
 }) => {
-  const [uuidName, setUuidName] = useState(null);   // State to hold a unique identifier (UUID) if name or id are not provided
-  // Effect hook to generate a UUID when the component is first rendered if no id or name is provided
+  const [uuidName, setUuidName] = useState(null);
   useEffect(() => {
     if (!id || !name) {
-      setUuidName(uuid());  // Set UUID for id and name
+      setUuidName(uuid());
     }
   }, []);
 
   return (
     <FormGroup>
-      {/* Render label if it exists */}
       {label !== "" && (
         <label
           htmlFor={name ?? uuidName}
@@ -54,12 +54,14 @@ const DateTimeInputMultiple = ({
       )}
       <div style={{ position: "relative" }}>
         <Datetime
+          // displayTimeZone={"Europe/London"}
           value={moment(value).isValid() ? moment(value) : null}
           closeOnSelect={!(extraProps?.timeFormat == true)}
-          className={` ${className}  ${feedbackType == "error"
-            ? "date-time-input-is-not-valid"
-            : "is-valid"
-            } input-background-color-default default-border-radius has_left_add_on_date_time `}
+          className={` ${className}  ${
+            feedbackType == "error"
+              ? "date-time-input-is-not-valid"
+              : "is-valid"
+          } input-background-color-default default-border-radius has_left_add_on_date_time `}
           onChange={async (e) => {
             const parsedDate = moment(e, moment.ISO_8601, true);
             let stringDate = parsedDate.isValid() ? e.toISOString() : null;
@@ -88,10 +90,21 @@ const DateTimeInputMultiple = ({
               ? moment(value).format(momentFormat)
               : "",
             disabled: disabled,
-
+            
           }}
           {...extraProps}
         />
+        {/* {!disabled && (
+          <CancelIcon
+            className="input_addon_icon_right me-1"
+            onClick={() => {
+              validateHandler && validateHandler(null);
+              setValue(null);
+              onBlurAction(null);
+            }}
+          />
+        )} */}
+        {/* <CalendarIcon className="input_addon_icon_left_date_time_calendar " /> */}
       </div>
       {feedbackType != "none" && (
         <div
