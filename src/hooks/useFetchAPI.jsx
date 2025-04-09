@@ -8,43 +8,37 @@ import {
 import { LogOutAction } from "../store/slices/LoginSlice";
 import { useDispatch } from "react-redux";
 
-// Custom hook to handle API fetch operations with several configurations.
 const useFetchAPI = (
   {
-    fullURL = null,  // Full URL for the API request. Defaults to null.
-    url = "",        // Endpoint URL to make the API request.
-    method = "GET",  // HTTP method (GET, POST, PUT, DELETE, etc.)
-    sendImmediately = false,  // Flag to send the request immediately on mount.
-    authRequired = false, // Flag to check if authentication is required.
-    params = null,   // Query parameters to be sent with the request.
-    body = null,     // Request body to be sent (for POST, PUT requests).
-    headers = null,  // Custom headers to be passed with the request.
-    isAsync = false, // Flag for asynchronous handling of the request.
-    isRefreshCall = false,  // Flag for handling refresh token calls.
-    haltRequest = false,    // Flag to halt the request before sending.
+    fullURL = null,
+    url = "",
+    method = "GET",
+    sendImmediately = false,
+    authRequired = false,
+    params = null,
+    body = null,
+    headers = null,
+    isAsync = false,
+    isRefreshCall = false,
+    haltRequest = false,
   },
-  dataTransform = null, // Optional function to transform response data.
-  errorTransform = null   // Optional function to transform error data.
+  dataTransform = null,
+  errorTransform = null
 ) => {
   const dispatch = useDispatch();
 
-  // State variables to manage fetching state, response data, and errors.
   const [fetching, setFetching] = useState(false);
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   useEffect(() => {
-    // If sendImmediately is true, call the immediateCall function.
     if (sendImmediately) {
       immediateCall();
     }
   }, []);
-
-  // Function to immediately execute the API request.
   const immediateCall = async () => {
     await execute();
   };
 
-  // Async error handler to process errors and update state.
   const catchErrorHandlerAsync = async (error) => {
     console.log(error?.response);
     if (!error?.response && error?.request) {
@@ -68,8 +62,6 @@ const useFetchAPI = (
     setFetching(false);
     setData(null);
   };
-
-  // Error handler for synchronous errors, handling logout and other errors.
   const catchErrorHandler = (error) => {
     console.log(error?.response?.data?.TokenExpired);
     if (!error?.response?.data?.TokenExpired) {
@@ -96,8 +88,6 @@ const useFetchAPI = (
     setFetching(false);
     setData(null);
   };
-
-  // Async success handler to handle successful API responses.
   const thenSuccessHandlerAsync = async (response) => {
     if (dataTransform) {
       let resultData = await dataTransform(response?.data);
@@ -108,8 +98,6 @@ const useFetchAPI = (
     setFetching(false);
     setError(null);
   };
-
-  // Success handler for synchronous success handling.
   const thenSuccessHandler = (response) => {
     if (dataTransform) {
       let resultData = dataTransform(response?.data);
@@ -121,7 +109,6 @@ const useFetchAPI = (
     setError(null);
   };
 
-  // Main function to execute the API request based on the method.
   const execute = async (newProps) => {
     setFetching(true);
     progressBarStart();
