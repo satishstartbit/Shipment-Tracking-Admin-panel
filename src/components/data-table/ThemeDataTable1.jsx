@@ -1,43 +1,37 @@
-import { Row } from "reactstrap";
-import "./ThemeDataTable.css";
-import PaginationComponent from "./PaginationComponent";
-import DataTableListComponent from "./DataTableListComponent";
-import TableDefaultError from "./TableDefaultError";
+import { Row } from "reactstrap";  // Importing Row component from Reactstrap for layout
+import "./ThemeDataTable.css"; // Importing custom styles for the data table
+import PaginationComponent from "./PaginationComponent";  // Importing the pagination component
+import DataTableListComponent from "./DataTableListComponent";  // Importing the data table list component
+import TableDefaultError from "./TableDefaultError";  // Importing the error component to show when something goes wrong
 const ThemeDataTable1 = ({
-  isLoading = false,
-  isError = false,
-  ErrorComponent = null,
-  NoDataMessage = "No records found",
-  totalRows = 0,
-  currentPage = 1,
-  currentRows = 10,
-  changeRowPage = null,
-  dataRows = [],
-  selectable = false,
-  selectedRows = {},
-  setSelectedRows = () => { },
-
-
-  selectedViewOption = "list",
-
-
-  listComponent = null,
-
-  retryAction = null,
-  errorConfig = { hasRetry: true },
-  selectableRowSelected = null,
-  isSelectAbleColumns2 = false,
-  selectPrimaryField = null,
-  sortAction = () => { },
-  sortField = null,
-  sortDirection = null,
-  setSelectedRowsData = () => { },
+  isLoading = false,  // Flag to show loading state
+  isError = false,  // Flag to show error state
+  ErrorComponent = null,  // Optional custom error component
+  NoDataMessage = "No records found",  // Message to show when no data is available
+  totalRows = 0,  // Total number of rows in the data
+  currentPage = 1,  // Current page number
+  currentRows = 10,  // Number of rows per page
+  changeRowPage = null,  // Callback to change the page
+  dataRows = [],  // Data to be displayed in the table
+  selectable = false,  // Whether rows can be selected
+  selectedRows = {},  // Selected rows data
+  setSelectedRows = () => { },  // Function to update selected rows
+  selectedViewOption = "list",  // View option: "list" or "grid"
+  listComponent = null,  // List of components to render in the table
+  retryAction = null,  // Retry action callback
+  errorConfig = { hasRetry: true },  // Config for error handling, like whether retry button should appear
+  selectableRowSelected = null,  // Function to determine if a row is selected
+  isSelectAbleColumns2 = false,  // Flag to enable selectable columns
+  selectPrimaryField = null,  // Field to uniquely identify rows for selection
+  sortAction = () => { },  // Function to handle sorting
+  sortField = null,  // Field to sort by
+  sortDirection = null,  // Sorting direction (asc/desc)
+  setSelectedRowsData = () => { },  // Function to update the selected rows' data
 }) => {
 
-console.log("totalRows", totalRows, dataRows);
-
+  // Handler for changing pages in pagination
   const pageNoChangeHandler = (newPage) => {
-    let totalPages = Math.ceil(totalRows / currentRows);
+    let totalPages = Math.ceil(totalRows / currentRows); // Calculate total pages
     if (
       changeRowPage &&
       newPage !== currentPage &&
@@ -45,9 +39,11 @@ console.log("totalRows", totalRows, dataRows);
       newPage < totalPages + 1 &&
       newPage
     ) {
-      changeRowPage(newPage, currentRows);
+      changeRowPage(newPage, currentRows); // Change page if valid
     }
   };
+
+  // Handler to check/uncheck rows for selection
   const selectableCheckHandler = (selectedRow) => {
     let newSelectedRows = [];
     let alreadySelected = selectedRows?.selectedRows
@@ -69,12 +65,15 @@ console.log("totalRows", totalRows, dataRows);
       newSelectedRows = [...existingSelectedRows, selectedRow];
       setSelectedRowsData(newSelectedRows);
     }
+    // Update the selected rows state
     setSelectedRows({
       allSelected: totalRows === newSelectedRows.length,
       selectedCount: newSelectedRows.length,
       selectedRows: newSelectedRows,
     });
   };
+
+  // Handler for checking/unchecking all rows from the header
   const selectableCheckHandlerHeader = (e) => {
     let isAlredyChecked = e?.target?.checked;
 
@@ -85,7 +84,7 @@ console.log("totalRows", totalRows, dataRows);
           (row2) => row2[selectPrimaryField] === row1[selectPrimaryField]
         );
         if (!rowExists) {
-          newSelectedRows.push(row1);
+          newSelectedRows.push(row1); // Add row to selected rows if not already selected
         }
       });
     } else {
@@ -94,7 +93,7 @@ console.log("totalRows", totalRows, dataRows);
           !(dataRows ?? []).some(
             (row2) => row2[selectPrimaryField] === row1[selectPrimaryField]
           )
-      );
+      );// Remove rows from selected rows
     }
     setSelectedRowsData(newSelectedRows);
     setSelectedRows({
@@ -109,23 +108,25 @@ console.log("totalRows", totalRows, dataRows);
       {isError && !isLoading && (
         <>
           {ErrorComponent ? (
-            <ErrorComponent />
+            <ErrorComponent />  // Render custom error component if provided
           ) : (
             <TableDefaultError errorMessage={errorConfig?.errorMessage} hasRetry={errorConfig?.hasRetry} retryAction={retryAction} />
           )}
         </>
       )}
+      {/* Show loading message if loading is true */}
       {isLoading && (
         <div className="w-full text-center default-loading-component">
           <p className="text-dark text-center w-full">Loading...</p>
         </div>
       )}
-
+      {/* Show no data message if there is no data */}
       {!isError && !isLoading && (dataRows ?? []).length === 0 && (
         <div className="w-full text-center default-no-data-component">
           <p className="text-dark text-center w-full">{NoDataMessage ?? "No records found"}</p>
         </div>
       )}
+      {/* If there is data, display it in a list or grid view */}
       {!isError && !isLoading && (dataRows ?? []).length > 0 && (
         <>
           {selectedRows?.selectedRows &&

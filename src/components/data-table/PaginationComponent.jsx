@@ -1,7 +1,5 @@
 import { Pagination, PaginationItem, PaginationLink } from "reactstrap";
 import "./ThemeDataTable.css";
-// import { ReactComponent as NextIcon } from "../../assets/icons/NextIcon.svg";
-// import { ReactComponent as PreviousIcon } from "../../assets/icons/PreviousIcon.svg";
 const PaginationComponent = ({
   totalRows,
   changePage,
@@ -51,7 +49,7 @@ const PaginationComponent = ({
             changePage(currentPage - 1);
           }}
         >
-          {/* <PreviousIcon /> */}Previous
+          Previous
         </PaginationLink>
       </PaginationItem>
       {getPageNumbers().map((page, index) => (
@@ -71,7 +69,7 @@ const PaginationComponent = ({
             changePage(currentPage + 1);
           }}
         >
-          {/* <NextIcon /> */}Next
+          Next
         </PaginationLink>
       </PaginationItem>
     </Pagination>
