@@ -8,3 +8,15 @@
   .css-13cymwt-control{
     border: 2px solid #e7e7e7 !important;
   }
+
+
+  .dialog-content {
+    position: absolute !important;
+    top: 10% !important;
+    background: #ffffff !important;
+    width: 50% !important;
+    left: 20%;
+    border: 2px solid #e5dddd !important;
+    border-radius: 10px !important;
+    padding: 15px !important;
+  }

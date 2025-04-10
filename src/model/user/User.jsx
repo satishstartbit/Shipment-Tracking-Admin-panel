@@ -7,6 +7,7 @@ import ThemeDataTable1 from "../../components/data-table/ThemeDataTable1"
 import { useNavigate } from "react-router-dom";
 import { Popover, PopoverTrigger, PopoverContent, PopoverAnchor } from "../../components/ui/popover";
 import NotificationAlert from "../../hooks/NotificationAlert";
+import Deleteuser from "./Deleteuser";
 
 
 const User = () => {
@@ -95,11 +96,13 @@ const User = () => {
     }
   );
 
-  useEffect(() => {
-    if (DeleteUserId) {
-      deleteUsersFetchHandler()
-    }
-  }, [DeleteUserId])
+
+
+  // State to control the popover visibility
+  const [isPopoverOpen, setPopoverOpen] = useState(false);
+  const handleDeleteClick = () => {
+    setPopoverOpen(!isPopoverOpen);
+  };
 
 
 
@@ -114,7 +117,7 @@ const User = () => {
               case "actions":
                 return <Popover asChild>
                   <PopoverTrigger asChild>
-                    <button className="btn">. . .</button>
+                    <button className="btn" >. . .</button>
                   </PopoverTrigger>
 
                   <PopoverContent className="popover-content w-50" >
@@ -127,6 +130,7 @@ const User = () => {
                     <div>
                       <button className="text-sm" onClick={() => {
                         setDeleteUserId(row?.["_id"])
+                        handleDeleteClick()
                       }} >
                         Delete User
                       </button>
@@ -185,27 +189,14 @@ const User = () => {
     );
   }, [savedTableColumns]);
 
-  // useEffect(() => {
-  //   getUsersFetchHandler({
-  //     params: {
-  //       page_size: pageSize,
-  //       page_no: pageNo,
-  //       search: inputSearch,
-  //       order: order.order,
-  //     },
-  //   });
-  // }, [selectedRole])
+
 
   return (
     <div className="p-6 bg-white shadow rounded-lg">
       <h2 className="text-[22px] font-semibold">Users</h2>
 
       <div className="flex justify-between items-center mb-5 mt-4 sm:flex-row sm:justify-between sm:items-center">
-        {/* <UserFilters
-          filter={inputSearch}
-          setFilter={setInputSearch}
-          setSelectedRole={setSelectedRole}
-        /> */}
+
         <div>
 
         </div>
@@ -224,6 +215,13 @@ const User = () => {
         currentPage={pageNo}
         currentRows={pageSize}
         retryAction={retryOrRefreshAction}
+      />
+
+
+      <Deleteuser
+        isModalOpen={isPopoverOpen}
+        closeModal={handleDeleteClick}
+        deleteUsersFetchHandler={deleteUsersFetchHandler}
       />
 
     </div>
