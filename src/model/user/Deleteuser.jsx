@@ -15,11 +15,11 @@ const Deleteuser = ({ isModalOpen, closeModal, deleteUsersFetchHandler }) => {
                         closeModal()
                     }
                     } className="sm-w-[100%] mx-2 bg-green-800">
-                        Confirm
+                        Yes
                     </Button>
 
                     <Button onClick={() => closeModal()} className="sm-w-[100%]">
-                        Cancel
+                        No
                     </Button>
 
                 </div>
