@@ -3,6 +3,7 @@ import "./InputWithAddOn.css";
 import uuid from "react-uuid";
 import { useEffect, useState } from "react";
 
+// Reusable input component with optional left/right add-ons, validation, and formatting
 const InputWithAddOn = ({
     hasAddOn = null,
     value = "",
@@ -29,14 +30,14 @@ const InputWithAddOn = ({
             setUuidName(uuid());
         }
     }, []);
-
+    // Remove leading zeros from number inputs except for "0" or "0.0"
     const removeLeadingZeros = (number) => {
         if (/^0$|^0(\.0+)?$/.test(number)) {
             return number;
         }
         return number.replace(/^0+(?!\.)/, '');
     };
-
+    // Handle change event with conditional formatting and validation
     const handleChange = (e) => {
         let newValue = e?.target?.value;
 
@@ -57,7 +58,7 @@ const InputWithAddOn = ({
             validateHandler(newValue);
         }
     };
-
+    // Handle blur event for trimming, formatting, and validation
     const handleBlur = (e) => {
         let trimmedValue = (value ? value + "" : "").trim();
         if (type === "text") {
@@ -116,6 +117,7 @@ const InputWithAddOn = ({
                 {hasAddOn?.left}
                 {hasAddOn?.right}
             </div>
+             {/* Show validation feedback message */}
             {feedbackType !== "none" && (
                 <div
                     className={`${feedbackType}-feedback-class m-0 p-0 ml-1 w-full`}
