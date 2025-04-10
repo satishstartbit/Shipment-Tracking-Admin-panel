@@ -2,6 +2,7 @@ import { FormGroup, Input } from "reactstrap";
 import "./InputWithAddOn.css";
 import uuid from "react-uuid";
 import { useEffect, useState } from "react";
+// Reusable input component with optional left/right add-ons and validation
 const InputWithAddOnMultiple = ({
   hasAddOn = null,
   value = "",
@@ -25,6 +26,7 @@ const InputWithAddOnMultiple = ({
 }) => {
   const DynamicElement = dynamicFormGroup ?? FormGroup;
   const [uuidName, setUuidName] = useState(null);
+  // Generate a UUID if id or name is missing
   useEffect(() => {
     if (!id || !name) {
       setUuidName(uuid());
@@ -103,6 +105,7 @@ const InputWithAddOnMultiple = ({
         {hasAddOn?.left}
         {hasAddOn?.right}
       </div>
+       {/* Show validation feedback message */}
       {feedbackType !== "none" && (
         <div
           className={feedbackType + "-feedback-class  m-0 p-0 ml-1 w-full"}
