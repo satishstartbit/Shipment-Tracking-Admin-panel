@@ -64,9 +64,9 @@ const Companies = () => {
   const [savedTableColumns, setSavedTableColumns] = useState([
     { name: "ACTION", key: "actions" },
     { name: "TRANSPORT COMPANY NAME", key: "company_name" },
-    { name: "CITY", key: "city" },
-    { name: "STATE", key: "state" },
-    { name: "COUNTRY", key: "country" },
+    // { name: "CITY", key: "city" },
+    // { name: "STATE", key: "state" },
+    // { name: "COUNTRY", key: "country" },
     { name: "USER NAME", key: "username" },
     { name: "FIRST NAME", key: "first_name" },
     { name: "LAST NAME", key: "last_name" },
