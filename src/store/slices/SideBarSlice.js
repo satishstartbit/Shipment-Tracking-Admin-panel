@@ -9,7 +9,7 @@ const initialState = {
   DefaultMini: false,
   IsRTL: false,
 };
-
+// SideBar Slice
 const SideBarSlice = createSlice({
   name: "SideBarSlice",
   initialState,

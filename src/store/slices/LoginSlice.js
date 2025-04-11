@@ -6,7 +6,7 @@ const initialState = {
   Email: null,
   password: null
 };
-
+// Login Slice
 const LoginSlice = createSlice({
   name: "LoginSlice",
   initialState,
