@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { Popover, PopoverTrigger, PopoverContent, PopoverAnchor } from "../../components/ui/popover";
 import NotificationAlert from "../../hooks/NotificationAlert";
 import Deleteuser from "./Deleteuser";
+import InputTableSearch from "../../components/forminputs/InputTableSearch";
 
 
 const User = () => {
@@ -189,7 +190,18 @@ const User = () => {
     );
   }, [savedTableColumns]);
 
-
+  const tableSearchChange = async (value) => {
+    setInputSearch(value);
+    setPageNo(1);
+    await getUsersFetchHandler({
+      params: {
+        page_size: 10,
+        page_no: 1,
+        search: value,
+        order: order.order,
+      },
+    });
+  };
 
   return (
     <div className="p-6 bg-white shadow rounded-lg">
@@ -203,6 +215,15 @@ const User = () => {
         <Button onClick={() => navigate("/createuser")} className="sm-w-[100%]">
           Add User
         </Button>
+      </div>
+
+      <div className="mb-3" >
+        <InputTableSearch
+          value={inputSearch}
+          setValue={tableSearchChange}
+          clearable={true}
+          className="inputtable-search"
+        />
       </div>
 
       <ThemeDataTable1
