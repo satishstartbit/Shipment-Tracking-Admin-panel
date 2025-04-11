@@ -66,6 +66,7 @@ const User = () => {
   const [savedTableColumns, setSavedTableColumns] = useState([
     { name: "ACTION", key: "actions" },
     { name: "USER NAME", key: "username" },
+    { name: "ROLE", key: "role" },
     { name: "EMAIL ID", key: "email" },
     { name: "FIRST NAME", key: "first_name" },
     { name: "LAST NAME", key: "last_name" },
@@ -114,6 +115,9 @@ const User = () => {
           name: obj?.name?.toUpperCase(),
           selector: (row) => {
             switch (obj?.key) {
+
+              case "role":
+                return row?.["roleDetails"]?.name
 
               case "actions":
                 return <Popover asChild>
