@@ -5,6 +5,7 @@ import useFetchAPI from "../../hooks/useFetchAPI";
 import ThemeDataTable1 from "../../components/data-table/ThemeDataTable1";
 import { useNavigate } from "react-router-dom";
 import { Popover, PopoverTrigger, PopoverContent } from "../../components/ui/popover";
+import InputTableSearch from "../../components/forminputs/InputTableSearch";
 
 const Companies = () => {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ const Companies = () => {
     order: "DESC",
   });
   // API call to fetch companies
-  const [getUsersFetchResponse, getUsersFetchHandler] = useFetchAPI(
+  const [getCompanyFetchResponse, getCompanyFetchHandler] = useFetchAPI(
     {
       url: `/company`,
       method: "GET",
@@ -42,12 +43,12 @@ const Companies = () => {
 
   const [customColumns, setCustomColumns] = useState([]);
   const retryOrRefreshAction = async () => {
-    await getUsersFetchHandler();
+    await getCompanyFetchHandler();
   };
 
   // Handle page or row size change
   const changePageRowHandle = async (page, pageSizes) => {
-    await getUsersFetchHandler({
+    await getCompanyFetchHandler({
       params: {
         page_size: pageSizes,
         page_no: page,
@@ -64,9 +65,6 @@ const Companies = () => {
   const [savedTableColumns, setSavedTableColumns] = useState([
     { name: "ACTION", key: "actions" },
     { name: "TRANSPORT COMPANY NAME", key: "company_name" },
-    // { name: "CITY", key: "city" },
-    // { name: "STATE", key: "state" },
-    // { name: "COUNTRY", key: "country" },
     { name: "USER NAME", key: "username" },
     { name: "FIRST NAME", key: "first_name" },
     { name: "LAST NAME", key: "last_name" },
@@ -81,7 +79,7 @@ const Companies = () => {
           name: obj?.name?.toUpperCase(),
           selector: (row) => {
 
-            let userDeatils = row["munshiId"]
+            let userDeatils = row["munshi"]
             switch (obj?.key) {
 
               case "username":
@@ -135,6 +133,22 @@ const Companies = () => {
     );
   }, [savedTableColumns]);
 
+
+
+  const tableSearchChange = async (value) => {
+    setInputSearch(value);
+    setPageNo(1);
+    await getCompanyFetchHandler({
+      params: {
+        page_size: 10,
+        page_no: 1,
+        search: value,
+        order: order.order,
+      },
+    });
+  };
+
+
   return (
     <div className="p-6 bg-white shadow rounded-lg">
       <h2 className="text-[22px] font-semibold">Transport Companies</h2>
@@ -149,13 +163,21 @@ const Companies = () => {
         </Button>
       </div>
 
+      <div className="mb-3" >
+        <InputTableSearch
+          value={inputSearch}
+          setValue={tableSearchChange}
+          clearable={true}
+          className="inputtable-search"
+        />
+      </div>
       <ThemeDataTable1
-        dataRows={getUsersFetchResponse?.data?.CompanyListing ?? []}
-        isLoading={getUsersFetchResponse?.fetching}
-        isError={getUsersFetchResponse?.error}
+        dataRows={getCompanyFetchResponse?.data?.CompanyListing ?? []}
+        isLoading={getCompanyFetchResponse?.fetching}
+        isError={getCompanyFetchResponse?.error}
         listComponent={customColumns}
         changeRowPage={changePageRowHandle}
-        totalRows={Number(getUsersFetchResponse?.data?.totalCompanyCount)}
+        totalRows={Number(getCompanyFetchResponse?.data?.totalCompanyCount)}
         currentPage={pageNo}
         currentRows={pageSize}
         retryAction={retryOrRefreshAction}
